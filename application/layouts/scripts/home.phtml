@@ -39,13 +39,13 @@ $authNameSpace = new Zend_Session_Namespace('datamanagers');
 	  .layout-boxed{
 		background: #fff;
 	  }
-	  
+
 	  .skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side,.content-wrapper{
 		background: #ecf0f5;
 		border:0;
 		box-shadow : none;
 	  }
-	  
+
 	  .layout-boxed .wrapper{
 		box-shadow : none;
 	  }
@@ -72,78 +72,55 @@ $authNameSpace = new Zend_Session_Namespace('datamanagers');
   </head>
   <body class="hold-transition skin-blue layout-top-nav layout-boxed">
     <div class="wrapper">
-
-      <header class="main-header">
-              <nav class="navbar navbar-static-top">
-                <div class="container">
-                  <div class="navbar-header">
-                    <a href="/" class="navbar-brand"><b>e</b>PT</a>
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                      <i class="fa fa-bars"></i>
-                    </button>
-                  </div>
-      
-                  <!-- Navbar Right Menu -->
-                    <div class="navbar-custom-menu">
-                  <ul class="nav navbar-nav">
-                    <?php if(isset($authNameSpace->dm_id)){ ?>
-                    <li class="dropdown user user-menu">
-                      <a href="<?php echo $this->url(array("controller"=>"participant","action"=>"dashboard"),null,true) ?>">
-                        <i class="icon icon-dashboard"></i> <span class=""><?php echo $authNameSpace->first_name." ".$authNameSpace->last_name; ?></span>
-                      </a>
-                    </li>
-                    <?php } else { ?>
-                    <li>
-                        <a href="<?php echo $this->url(array("controller"=>"contact-us","action"=>"index"),null,true) ?>"><i class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
-                    </li>
-                    <li>
-                        <a href="<?php echo $this->url(array("controller"=>"auth","action"=>"login"),null,true) ?>"><i class="icon icon-lock"></i> <span>Participant Login</span></a>
-                    </li>
-                    <li>
-                        <a href="<?php echo $this->url(array("module"=>"admin","controller"=>"index","action"=>"index"),null,true) ?>"><i class="icon icon-lock"></i> <span>PTCC Login</span></a>
-                    </li>
-                    <?php } ?>
-                  </ul>
-                    </div><!-- /.navbar-custom-menu -->
-                </div><!-- /.container-fluid -->
-              </nav>
-            </header>      <!-- Left side column. contains the logo and sidebar -->
-
+          <header class="main-header">
+            <nav class="navbar navbar-static-top">
+              <div class="container" style="padding-left: 0;">
+                <div class="navbar-header">
+                  <a href="/" class="navbar-brand" style="margin: 0; padding: 5px; background-color: rgb(249, 249, 249);">
+                    <img src="<?php echo $this->baseUrl(); ?>/images/ept-logo.png" alt="ePT" title="ePT" style="margin-top:0px; display: inline-block; height: 40px; float: left;" />
+                  </a>
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                  </button>
+                </div>
+                <!-- Navbar Right Menu -->
+                  <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                  <?php if(isset($authNameSpace->dm_id)){ ?>
+                  <li class="dropdown user user-menu">
+                    <a href="<?php echo $this->url(array("controller"=>"participant","action"=>"dashboard"),null,true) ?>">
+                      <i class="icon icon-dashboard"></i> <span class=""><?php echo $authNameSpace->first_name." ".$authNameSpace->last_name; ?></span>
+                    </a>
+                  </li>
+                  <?php } else { ?>
+                  <li>
+                      <a class="nav-link" href="<?php echo $this->url(array("controller"=>"auth","action"=>"login"),null,true) ?>"><i class="icon icon-lock"></i> <span>Participant Login</span></a>
+                  </li>
+                  <li>
+                      <a class="nav-link" href="<?php echo $this->url(array("module"=>"admin","controller"=>"index","action"=>"index"),null,true) ?>"><i class="icon icon-lock"></i> <span>PECC Login</span></a>
+                  </li>
+                  <?php } ?>
+                </ul>
+                  </div><!-- /.navbar-custom-menu -->
+              </div><!-- /.container-fluid -->
+            </nav>
+          </header>      <!-- Left side column. contains the logo and sidebar -->
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper" style="float:left;clear:both;background: #F9F9F9;width:100%;padding-bottom:20px;margin-bottom:10px;">
         <!-- Content Header (Page header) -->
 		<section class="content">
-		  <div class="col-lg-12">
-			<div class="col-lg-2" style="text-align: center;padding:10px;"><img src="<?php echo $this->baseUrl(); ?>/images/country/country-flag.jpg" style="max-height:100px;"/></div>
-			<div class="col-lg-8" style="text-align: center;padding:10px;">
-			   <a href="/"><img src="<?php echo $this->baseUrl(); ?>/images/ept-logo.png" style="margin-top:0px;"/></a><br>
-			   <?php
-			   $text = $this->GetTextUnderLogo();
-			   if(isset($text) && $text['value']!= null && trim($text['value'])!= ''){
-			      echo '<h5>'.ucwords($text['value']).'</h5>';
-			   }
-			   ?>
-			</div>
-			<div class="col-lg-2" style="text-align: center;padding:10px;"><img src="<?php echo $this->baseUrl(); ?>/images/country/institute-logo.jpg" style="max-height:100px;"/></div>						
-		  </div>
 		  <?php echo $this->layout()->content; ?>
-		  
 		</section>
-      
       </div><!-- /.content-wrapper -->
       <footer class="main-footer" style="">
-		
         <div class="pull-right hidden-xs">
           <strong><a href="http://www.taskforce.org">Funded by TaskForce</a></strong>
         </div>
         <span>ePT-Online Proficiency Testing</span>
       </footer>
-
       <div class="control-sidebar-bg"></div>
     </div><!-- ./wrapper -->
-
     <!-- jQuery 2.1.4 -->
-    
     <!-- jQuery UI 1.11.4 -->
     <script src="<?php echo $this->baseUrl("assets/plugins/jQueryUI/jquery-ui.min.js"); ?>"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -152,17 +129,15 @@ $authNameSpace = new Zend_Session_Namespace('datamanagers');
     </script>
     <!-- Bootstrap 3.3.5 -->
     <script src="<?php echo $this->baseUrl('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/hoverIntent.js"); ?>"></script>
-
+    <script type="text/javascript" src="<?php echo $this->baseUrl("js/hoverIntent.js"); ?>"></script>
     <script src="<?php echo $this->baseUrl("assets/plugins/datatables/jquery.dataTables.min.js"); ?>"></script>
     <script src="<?php echo $this->baseUrl("assets/plugins/datatables/dataTables.bootstrap.min.js"); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.blockUI.js"); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayValidation.js"); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/moment.min.js"); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayModal.js"); ?>"></script>	
-
+    <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.blockUI.js"); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayValidation.js"); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl("js/moment.min.js"); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayModal.js"); ?>"></script>
     <!-- AdminLTE App -->
     <script src="<?php echo $this->baseUrl('assets/dist/js/app.min.js'); ?>"></script>
-    
+
   </body>
 </html>

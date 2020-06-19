@@ -7,7 +7,7 @@
 
                 <div class="col-lg-5">
                     <select id="category" name="category" class="isRequired form-control" title="Please select category" onchange="getCategoryValue(this.value);">
-                        <option value=""> -- Select -- </option>
+                        <option value="">--Select--</option>
                         <option value="extraction" <?php echo ($this->source == "extraction") ?"selected='selected'":""; ?>>Extraction</option>
                         <option value="detection" <?php echo ($this->source == "detection") ?"selected='selected'":""; ?>>Detection</option>
                     </select>

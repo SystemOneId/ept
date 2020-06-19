@@ -208,6 +208,15 @@ class Application_Service_Shipments {
         $distributionService->updateDistributionStatus($dist_id,$status);
     }
 
+    public function lastThreeShipments() {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $sQuery = $db->select()->from(array('s' => 'shipment'))
+            ->where('s.is_official=1')
+            ->order('s.shipment_date desc')
+            ->limit(3);
+        return $db->fetchAll($sQuery);
+    }
+
     public function getShipmentsForScheme($scheme) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sQuery = $db->select()->from(array('s' => 'shipment'))
@@ -922,6 +931,7 @@ class Application_Service_Shipments {
             'number_of_samples' => count($params['sampleName']) - $controlCount,
 			'number_of_controls' => $controlCount,
             'lastdate_response' => Application_Service_Common::ParseDate($params['lastDate']),
+            'is_official' => $params['isOfficial'] == 'yes' ? 1 : 0,
             'created_on_admin' => new Zend_Db_Expr('now()'),
             'created_by_admin' => $authNameSpace->primary_email
         );

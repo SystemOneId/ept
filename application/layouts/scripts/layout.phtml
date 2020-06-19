@@ -64,7 +64,8 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
 
       <header class="main-header">
         <!-- Logo -->
-        <a href="/" class="logo">
+        <a href="/" class="logo" style="margin-top: 0;">
+          <img src="<?php echo $this->baseUrl(); ?>/images/ept-logo.png" style="margin-top:0px; display: inline-block; height: 40px; float: left;" />
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>e</b>PT</span>
           <!-- logo for regular state and mobile devices -->
@@ -86,11 +87,10 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
               </li>
 			  <?php } else{ ?>
 			  <li>
-				  <a href="<?php echo $this->url(array("controller"=>"contact-us","action"=>"index"),null,true) ?>"><i class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
-				</li>
-				 <li>
-				  <a href="<?php echo $this->url(array("controller"=>"auth","action"=>"login"),null,true) ?>"><i class="icon icon-lock"></i> <span>Participant Login</span></a>
-				</li>
+			    <a href="<?php echo $this->url(array("controller"=>"auth","action"=>"login"),null,true) ?>">
+                    <i class="icon icon-lock"></i> <span>Participant Login</span>
+                </a>
+			  </li>
 			  <?php } ?>
             </ul>
           </div>
@@ -155,20 +155,15 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
 			  <li class="<?php echo ($activeMenu == 'contact-us') ? ' active ' : '';  ?>"><a href="<?php echo $this->url(array("controller"=>"contact-us"),null,true) ?>"><i class="icon icon-envelope"></i> <span>Contact Us </span></a></li>
 			  <?php } ?>
 
-
-<?php if(!isset($authNameSpace->dm_id)){ ?>
+              <?php if(!isset($authNameSpace->dm_id)){ ?>
 				<li>
-				  <a href="<?php echo $this->url(array("controller"=>"contact-us","action"=>"index"),null,true) ?>"><i class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
-				</li>
-				 <li>
 				  <a href="<?php echo $this->url(array("controller"=>"auth","action"=>"login"),null,true) ?>"><i class="icon icon-lock"></i> <span>Participant Login</span></a>
 				</li>
 				 <?php } else{ ?>
 				 <li>
 				  <a class="" href="<?php echo $this->url(array("controller"=>"auth","action"=>"logout"),null,true) ?>" ><i class="icon icon-signout"></i> <span>Logout</span></a>
 				</li>
-				 <?php } ?>
-
+			  <?php } ?>
           </ul>
         </section>
         <!-- /.sidebar -->
@@ -209,42 +204,42 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
     </script>
     <!-- Bootstrap 3.3.5 -->
     <script src="<?php echo $this->baseUrl('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/hoverIntent.js"); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl("js/hoverIntent.js"); ?>"></script>
 
     <script src="<?php echo $this->baseUrl("assets/plugins/datatables/jquery.dataTables.min.js"); ?>"></script>
     <script src="<?php echo $this->baseUrl("assets/plugins/datatables/dataTables.bootstrap.min.js"); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.blockUI.js"); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayValidation.js"); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/moment.min.js"); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayModal.js"); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.blockUI.js"); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayValidation.js"); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl("js/moment.min.js"); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayModal.js"); ?>"></script>
 
-  <!-- AdminLTE App -->
-  <script src="<?php echo $this->baseUrl('assets/dist/js/app.min.js'); ?>"></script>
+    <!-- AdminLTE App -->
+    <script src="<?php echo $this->baseUrl('assets/dist/js/app.min.js'); ?>"></script>
 
-  <script type="text/javascript">
-	function layoutModal(url,w,h){
-	     showdefModal('dDiv',w,h);
-	     document.getElementById('dFrame').style.height=h+'px';
-	     document.getElementById('dFrame').style.width=w+'px';
-	     document.getElementById('dFrame').src = url;
-  }
-
-  function closeLayoutModal(){
-      document.getElementById('dFrame').src = "";
-      //window.location.reload(true);
-      hidedefModal();
-  }
-
-  Array.prototype.remove= function(){
-    var what, a= arguments, L= a.length, ax;
-    while(L && this.length){
-        what= a[--L];
-        while((ax= this.indexOf(what))!= -1){
-            this.splice(ax, 1);
-        }
+    <script type="text/javascript">
+    function layoutModal(url,w,h) {
+         showdefModal('dDiv',w,h);
+         document.getElementById('dFrame').style.height=h+'px';
+         document.getElementById('dFrame').style.width=w+'px';
+         document.getElementById('dFrame').src = url;
     }
-    return this;
- }
-  </script>
+
+    function closeLayoutModal() {
+        document.getElementById('dFrame').src = "";
+        //window.location.reload(true);
+        hidedefModal();
+    }
+
+    Array.prototype.remove = function() {
+        var what, a = arguments, L = a.length, ax;
+        while (L && this.length) {
+            what= a[--L];
+            while ((ax= this.indexOf(what)) != -1) {
+                this.splice(ax, 1);
+            }
+        }
+        return this;
+    }
+    </script>
   </body>
 </html>

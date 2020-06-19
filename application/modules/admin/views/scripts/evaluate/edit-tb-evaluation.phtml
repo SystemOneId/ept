@@ -134,7 +134,7 @@ if (
             </td>
             <td>
                 <select class="form-control" name="assay" id="assay" class="form-control" title="Please choose the assay type">
-                    <option value=""> -- Select -- </option>
+                    <option value="">--Select--</option>
                     <?php foreach ($this->assays as $id => $definition) { ?>
                         <option value="<?php echo $id; ?>" <?php if (isset($attributes['assay'])) {
                                                                 echo ($attributes['assay'] == $id) ? "selected='selected'" : "";
@@ -264,7 +264,7 @@ if (
             </th>
             <td>
                 <select name="supervisorApproval" id="supervisorApproval" class="isRequired form-control" title="Please select if Supervisor Approval was conducted or not">
-                    <option value=""> -- Select -- </option>
+                    <option value="">--Select--</option>
                     <option value="yes" <?php if (strtolower($this->evaluateData['shipment']['supervisor_approval']) == 'yes') echo " selected "; ?>>YES</option>
                     <option value="no" <?php if (strtolower($this->evaluateData['shipment']['supervisor_approval']) == 'no') echo " selected "; ?>>NO</option>
                 </select>
@@ -384,7 +384,7 @@ if (
                         </td>
                         <td style="vertical-align: top;text-align: center;width: 13%;background-color: transparent;">
                             <select id="mtbDetected<?php echo $counter; ?>" name="mtbDetected[<?php echo $index; ?>]" class="isRequired form-control input-sm mtbDetected" title="Please enter the MTB Detected for this sample" placeholder="Please enter the MTB Detected for this sample" onChange="changeMtbDetected(<?php echo $counter; ?>)">
-                                <option value="">-- Select --</option>
+                                <option value="">--Select--</option>
                                 <option value="detected" <?php echo ($result['res_mtb_detected'] == 'detected' ? "selected='selected'" : ""); ?>>
                                     Detected
                                 </option>
@@ -426,7 +426,7 @@ if (
                             <select id="rifResistance<?php echo $counter; ?>" name="rifResistance[<?php echo $index; ?>]" class="isRequired form-control input-sm" title="Please enter the Rif Resistance for this sample" placeholder="Please enter the Rif Resistance for this sample" <?php if (!$rifResistanceEnabled) {
                                                                                                                                                                                                                                                                                                 echo "readonly";
                                                                                                                                                                                                                                                                                             } ?>>
-                                <option value="">-- Select --</option>
+                                <option value="">--Select--</option>
                                 <option value="detected" <?php echo ($result['res_rif_resistance'] == 'detected' ? "selected='selected'" : ""); ?>>
                                     Detected
                                 </option>
@@ -917,3 +917,4 @@ if (
         });
     }
 </script>
+

@@ -1,7 +1,7 @@
 <?php
-	
+
 	$attributes = json_decode($this->evaluateData['shipment']['attributes'],true);
-	
+
 $genderHelper = $this->getHelper('DateFormat');
 $dtFormat=  $genderHelper->getDateFormat();
 ?>
@@ -21,7 +21,7 @@ $dtFormat=  $genderHelper->getDateFormat();
 	<tr>
 		<th>Shipment Received on</th>
 		<td>
-		
+
 			<input type="text" id="receiptDate" name="receiptDate" size="11" maxlength="11" style="width:180px;float:left;" value="<?php echo $this->dateFormat($this->evaluateData['shipment']["shipment_receipt_date"]); ?>" class="form-control datepicker" readonly="readonly"   title="Please enter Test Receipt Date" />
 			<i class="icon-remove-sign" style="cursor:pointer;margin-top:10px;margin-left:10px;float:left;" alt="Clear Date" title="Clear Date"  onclick="clearDate('receiptDate')"> Clear</i>
 		</td>
@@ -32,18 +32,18 @@ $dtFormat=  $genderHelper->getDateFormat();
 		</td>
 	</tr>
 	<tr>
-		<th><label>Samples Tested on</label></th> 
+		<th><label>Samples Tested on</label></th>
 		<td>
 			<input type="text" id="testDate" name="testDate"  style="width:180px;float:left;"  maxlength="11" value="<?php  echo  $this->dateFormat($this->evaluateData['shipment']["shipment_test_date"]); ?>"  class="isRequired datepicker form-control" readonly="readonly" />
 			<i class="icon-remove-sign" style="cursor:pointer;margin-top:10px;margin-left:10px;float:left;" alt="Clear Date" title="Clear Date"  onclick="clearDate('testDate')"> Clear</i>
-		</td>		
+		</td>
 
-		<th><label>Specimen Volume used for testing</label></th> 
+		<th><label>Specimen Volume used for testing</label></th>
 		<td>
 			<input type="text" name="specimenVolume" id="specimenVolume" class="form-control"  value="<?php echo $attributes['specimen_volume'];?>"/>
 		</td>
 	</tr>
-			
+
 		<tr>
 		<td><label>Viral Load Assay <span class="mandatory">*</span></label></td>
 		<td>
@@ -52,25 +52,25 @@ $dtFormat=  $genderHelper->getDateFormat();
 			<?php
 			foreach($this->vlAssay as $id => $name){
 			?>
-				<option value="<?php echo $id; ?>"  <?php echo ($attributes['vl_assay'] == $id) ? "selected='selected'" : "";?>><?php echo $name; ?></option>	
+				<option value="<?php echo $id; ?>"  <?php echo ($attributes['vl_assay'] == $id) ? "selected='selected'" : "";?>><?php echo $name; ?></option>
 			<?php
 			}
 			?>
 		</select>
 		</td>
-		<td class="hideOtherAssay"><label>Please specify Other Assay Name <span class="mandatory">*</span></label></td> 
+		<td class="hideOtherAssay"><label>Please specify Other Assay Name <span class="mandatory">*</span></label></td>
 		<td class="hideOtherAssay">
 			<input type="text" name="otherAssay" id="otherAssay" class="form-control"  value="<?php echo (isset($attributes['other_assay']) && ($attributes['other_assay'] != "")) ? $attributes['other_assay'] : ""; ?>" title="Please specify Other Assay Name" />
 		</td>
-		
-	</tr>		
+
+	</tr>
 		<tr>
 			<th>Assay Expiration Date</th>
 			<td>
 				<input type="text" name="assayExpirationDate" id="assayExpirationDate" style="width:180px;float:left;"  class="isRequired expDatepicker form-control" readonly="readonly"  value="<?php echo $this->dateFormat($attributes['assay_expiration_date']);?>" title="Please enter Assay Expiration date" placeholder="Please enter Assay Expiration date"/>
 				<i class="icon-remove-sign" style="cursor:pointer;margin-top:10px;margin-left:10px;float:left;" alt="Clear Date" title="Clear Date"  onclick="clearDate('assayExpirationDate')"> Clear</i>
 			</td>
-		<th><label>Assay Lot Number <span class="mandatory">*</span></label></th> 
+		<th><label>Assay Lot Number <span class="mandatory">*</span></label></th>
 		<td>
 			<input type="text" name="assayLotNumber" id="assayLotNumber" class="isRequired form-control"  value="<?php echo $attributes['assay_lot_number'];?>" title="Please enter Assay lot number" placeholder="Please enter Assay lot number"/>
 		</td>
@@ -79,7 +79,7 @@ $dtFormat=  $genderHelper->getDateFormat();
          <th>Supervisor Review</th>
         <td>
             <select name="supervisorApproval" id="supervisorApproval" class="isRequired form-control"  title="Please select if Supervisor Approval was conducted or not">
-                <option value=""> -- Select -- </option>
+                <option value="">--Select--</option>
                 <option value="yes" <?php if (strtolower($this->evaluateData['shipment']['supervisor_approval']) == 'yes') echo " selected "; ?>>YES</option>
                 <option value="no" <?php if (strtolower($this->evaluateData['shipment']['supervisor_approval']) == 'no') echo " selected "; ?>>NO</option>
             </select>
@@ -103,17 +103,17 @@ $dtFormat=  $genderHelper->getDateFormat();
 			   )
 			{
 				?>
-				
+
 					<a href="/uploads/<?php echo $attributes['uploaded_file'] ?>" download><?php echo basename($attributes['uploaded_file']); ?></a>
-				
-				
+
+
 				<?php
 			}
 			?>
 			</td>
 		<td></td>
 		<td></td>
-	</tr>	
+	</tr>
 	</table>
        <br/>
        <?php
@@ -149,7 +149,7 @@ $dtFormat=  $genderHelper->getDateFormat();
 					<th style="text-align: center;font-size:17px;width:120px;">Response</th>
 					<th style="text-align: center;font-size:17px;">Acceptable ?</th>
 				</tr>
-					
+
 				<?php
 				$counter = 1;
 				foreach($this->evaluateData['controlResults'] as $result){
@@ -162,7 +162,7 @@ $dtFormat=  $genderHelper->getDateFormat();
 
 				<tr class="<?php echo $class ?>">
 					<td style="vertical-align: middle;"><?php echo $result['sample_label']; ?></td>
-					
+
 					<td style="vertical-align: middle;text-align: center;">
 						<?php
 							if(isset($this->vlRange[$attributes['vl_assay']])){
@@ -195,15 +195,15 @@ $dtFormat=  $genderHelper->getDateFormat();
 								}else{
 									echo "No";
 								}
-								
-								
+
+
 							}else{
 								echo "N/A";
 							}
 						?>
 					</td>
 				</tr>
-						
+
 					<?php
 					$counter++;
 				}
@@ -222,11 +222,11 @@ $dtFormat=  $genderHelper->getDateFormat();
 					<th style="text-align: center;font-size:17px;">Higher Limit</th>
 					<th style="text-align: center;font-size:17px;width:120px;">Response</th>
 					<th style="text-align: center;font-size:17px;">Acceptable?</th>
-			
+
 		</tr>
-			
+
 		<?php
-		
+
 		$total = 0;
 		$counter = 1;
 		foreach($this->evaluateData['results'] as $result){
@@ -256,7 +256,7 @@ $dtFormat=  $genderHelper->getDateFormat();
 								echo "Not enough responses for this VL Assay";
 							}
 						?>
-					</td>					
+					</td>
 					<td style="vertical-align: middle;text-align:center;">
 						<input type="text" name="reported[]" value="<?php echo $result['reported_viral_load']; ?>" class="form-control" />
 						<input type="hidden" name="sampleId[]" value="<?php echo $result['sample_id']; ?>" />
@@ -270,15 +270,15 @@ $dtFormat=  $genderHelper->getDateFormat();
 									echo "Yes";
 								}else{
 									echo "No";
-								}							
-								
+								}
+
 							}else{
 								echo "N/A";
 							}
 						?>
 					</td>
 				</tr>
-				
+
 			<?php
 			$counter++;
 		}
@@ -286,7 +286,7 @@ $dtFormat=  $genderHelper->getDateFormat();
 
 </table>
 	<script>
-			
+
 	function showHideOtherAssay(assayVal){
 		if (assayVal == 6) {
 			$(".hideOtherAssay").show();
@@ -311,9 +311,9 @@ $dtFormat=  $genderHelper->getDateFormat();
 			$("#vlResponseForm").find("input:enabled, select:enabled, textarea:enabled").attr("disabled", "disabled");
 			<?php
 		}
-		?>		
+		?>
 	});
-	
+
 	function clearDate(id) {
 		$("#" + id).val('');
 	}

@@ -2,7 +2,7 @@
  * The following copyright notice may not be removed under any circumstances.
  * 
  * Copyright:
- * © 1992, 1994, 1997, 2000, 2004 Adobe Systems Incorporated. All rights reserved.
+ * ï¿½ 1992, 1994, 1997, 2000, 2004 Adobe Systems Incorporated. All rights reserved.
  * Protected by U.S. Patents D454,582.
  * 
  * Trademark:
