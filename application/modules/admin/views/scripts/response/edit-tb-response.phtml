@@ -27,8 +27,7 @@ if (isset($this->responseData['shipment']["shipment_test_report_date"]) &&
     <tr>
         <td colspan="2">
             <h4 class="text-info">
-                Was the participant able to test the performance evaluation panel?
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                Was the participant able to test the performance evaluation panel?&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" id="ableToEnterResultsYes" name="ableToEnterResults" value="yes"
                 <?php echo ($this->responseData['shipment']['is_pt_test_not_performed'] == "no" || $this->responseData['shipment']['is_pt_test_not_performed'] == "" || $this->responseData['shipment']['is_pt_test_not_performed'] == null) ? " checked='checked' " : ""; ?> />
                 <label for="ableToEnterResultsYes">Yes</label>&nbsp;&nbsp;
@@ -44,11 +43,11 @@ if (isset($this->responseData['shipment']["shipment_test_report_date"]) &&
         </td>
         <td>
             <select id="notTestedReason" name="notTestedReason" class="form-control" title="Please select reason" style="width:60%;">
-                <option value="">--Select--</option>
+                <option selected>--Select--</option>
 <?php
     foreach($this->allNotTestedReason as $reason) { ?>
                 <option value="<?php echo $reason['not_tested_reason_id']; ?>"
-                    <?php echo($this->responseData['shipment']['not_tested_reason'] == $reason['not_tested_reason_id']) ? 'selected="selected"':''; ?>>
+                <?php echo($this->responseData['shipment']['not_tested_reason'] == $reason['not_tested_reason_id']) ? 'selected="selected"':''; ?>>
                     <?php echo ucwords($reason['not_tested_reason']); ?>
                 </option>
 <?php
@@ -120,6 +119,7 @@ if (isset($this->responseData['shipment']["shipment_test_report_date"]) &&
         <td>
             <select class="form-control" name="assay" id="assay" class="form-control"
                     title="Please choose the assay type">
+                <option>--Select--</option>
                 <?php foreach ($this->assays as $id => $definition) { ?>
                     <option value="<?php echo $id; ?>" <?php if(isset($attributes['assay'])) { echo ($attributes['assay'] == $id) ? "selected='selected'" : ""; } ?>>
                         <?php echo $definition['name']; ?>

@@ -136,6 +136,7 @@ if (isset($this->evaluateData['shipment']["shipment_test_report_date"]) &&
             <td>
                 <select class="form-control" name="assay" id="assay" class="form-control"
                         title="Please choose the assay type">
+                    <option >--Select--</option>
                     <?php foreach ($this->assays as $id => $definition) { ?>
                     <option value="<?php echo $id; ?>" <?php if(isset($attributes['assay'])) { echo ($attributes['assay'] == $id) ? "selected='selected'" : ""; } ?>>
                         <?php echo $definition['name']; ?>
