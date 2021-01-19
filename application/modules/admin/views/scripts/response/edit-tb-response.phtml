@@ -43,7 +43,7 @@ if (isset($this->responseData['shipment']["shipment_test_report_date"]) &&
         </td>
         <td>
             <select id="notTestedReason" name="notTestedReason" class="form-control" title="Please select reason" style="width:60%;">
-                <option selected>--Select--</option>
+                <option value="" selected='selected'>--Select--</option>
 <?php
     foreach($this->allNotTestedReason as $reason) { ?>
                 <option value="<?php echo $reason['not_tested_reason_id']; ?>"
