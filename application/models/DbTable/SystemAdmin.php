@@ -1,8 +1,8 @@
 <?php
 
 class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
-    protected $_name = 'system_admin';
-    protected $_primary = 'admin_id';
+    protected $_name = "system_admin";
+    protected $_primary = "admin_id";
 
     public function getAllAdmin($parameters) {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -69,7 +69,6 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
             }
             $sWhere .= $sWhereSub;
         }
-
         /* Individual column filtering */
         for ($i = 0; $i < count($aColumns); $i++) {
             if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
@@ -82,9 +81,9 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         }
 
         if ($sWhere == "") {
-            $sWhere .= "is_ptcc_coordinator = 0";
+            $sWhere .= "is_ptcc_coordinator = 0 OR is_ptcc_coordinator=1";
         } else {
-            $sWhere .= " AND is_ptcc_coordinator = 0";
+            $sWhere .= " AND (is_ptcc_coordinator = 0 OR is_ptcc_coordinator=1)";
         }
         $authNameSpace = new Zend_Session_Namespace('administrators');
         if ($authNameSpace->is_ptcc_coordinator) {
@@ -97,7 +96,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
          */
 
         $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name))
-            ->joinLeft(array('pcm' => 'ptcc_country_map'), 'a.admin_id=pcm.admin_id', array());
+            ->joinLeft(array('pcm' => 'ptcc_country_map'), 'pcm.admin_id=a.admin_id', array());
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -111,7 +110,6 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
         $rResult = $this->getAdapter()->fetchAll($sQuery);
-
         /* Data set length after filtering */
         $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_COUNT);
         $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_OFFSET);
@@ -314,14 +312,15 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
     }
 
     public function getSystemAdminDetails ($adminId) {
-        $sql = $this->getAdapter()->select()->from(array('a' => $this->_name));
+        $dbAdapter= $this->getAdapter();
+        $sql = $dbAdapter->select()->from(array('a' => $this->_name));
         $authNameSpace = new Zend_Session_Namespace('administrators');
         if ($authNameSpace->is_ptcc_coordinator) {
             $sql = $sql->joinLeft(array('pcm' => 'ptcc_country_map'), 'a.admin_id=pcm.admin_id', array())
             ->where("pcm.country_id IN (".implode(",",$authNameSpace->countries).")");
         }
         $sql = $sql->where("a.admin_id = ? ",$adminId);
-        return $this->fetchRow($sql);
+        return $dbAdapter->fetchRow($sql);
     }
 
     public function updateSystemAdmin ($params) {
@@ -460,3 +459,4 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         return $ptccProfile;
     }
 }
+
