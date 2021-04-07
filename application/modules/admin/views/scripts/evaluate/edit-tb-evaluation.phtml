@@ -182,7 +182,7 @@ if (
         </tr>
         <tr>
             <td>
-                <label>How many Xpert MTB/RIF and MTB Ultra tests have been conducted by this site in the last full month?</label>
+                <label>How many Xpert TB and MTB Ultra tests have been conducted by this site in the last full month?</label>
             </td>
             <td>
                 <input type="text" name="countTestsConductedOverMonth" id="countTestsConductedOverMonth" class="form-control" value="<?php if (isset($attributes['count_tests_conducted_over_month'])) {
@@ -720,7 +720,7 @@ if (
         $(".probe6Header").text(selectedAssayDefinition['analyte6Label']);
         $(".mtbRifReferenceProbe").hide();
         $(".ultraReferenceProbe").hide();
-        if (selectedAssayDefinition['name'] === 'Xpert MTB/RIF') {
+        if (selectedAssayDefinition['name'] === 'Xpert TB') {
             $(".mtbRifReferenceProbe").show();
         } else if (selectedAssayDefinition['name'] === 'Xpert MTB Ultra') {
             $(".ultraReferenceProbe").show();

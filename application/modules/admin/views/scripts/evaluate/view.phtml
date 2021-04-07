@@ -128,7 +128,7 @@ $reportDate = explode(" ", $this->evaluateData['shipment']['shipment_test_report
             </td>
         </tr>
         <tr>
-            <td><label>How many Xpert MTB/RIF and MTB Ultra tests have been conducted by this site in the last full month?</label></td>
+            <td><label>How many Xpert TB and MTB Ultra tests have been conducted by this site in the last full month?</label></td>
             <td>
                 <?php if(isset($attributes['count_tests_conducted_over_month'])) {
                     echo $attributes['count_tests_conducted_over_month'];
@@ -387,7 +387,7 @@ $reportDate = explode(" ", $this->evaluateData['shipment']['shipment_test_report
                         <td style="vertical-align: middle;text-align: right;">Reference Values:</td>
                         <td style="vertical-align: middle;text-align: center;">
                             <?php
-                            if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB/RIF') {
+                            if ($this->evaluateData['shipment']['assay_name'] == 'Xpert TB') {
                                 switch ($result['ref_mtb_rif_mtb_detected']) {
                                     case "high":
                                         echo "High";
@@ -454,7 +454,7 @@ $reportDate = explode(" ", $this->evaluateData['shipment']['shipment_test_report
                         <td></td>
                         <td style="vertical-align: middle;text-align:center;">
                             <?php
-                            if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB/RIF') {
+                            if ($this->evaluateData['shipment']['assay_name'] == 'Xpert TB') {
                                 switch ($result['ref_mtb_rif_rif_resistance']) {
                                     case "detected":
                                         echo "Detected";
@@ -487,7 +487,7 @@ $reportDate = explode(" ", $this->evaluateData['shipment']['shipment_test_report
                         </td>
                         <td style="vertical-align: middle;text-align: right;">
                             <?php
-                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB/RIF') {
+                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert TB') {
                                     echo $result['ref_mtb_rif_probe_d'];
                                 } else if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB Ultra') {
                                     echo $result['ref_ultra_probe_spc'];
@@ -496,7 +496,7 @@ $reportDate = explode(" ", $this->evaluateData['shipment']['shipment_test_report
                         </td>
                         <td style="vertical-align: middle;text-align: right;">
                             <?php
-                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB/RIF') {
+                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert TB') {
                                     echo $result['ref_mtb_rif_probe_c'];
                                 } else if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB Ultra') {
                                     echo $result['ref_ultra_probe_is1081_is6110'];
@@ -505,7 +505,7 @@ $reportDate = explode(" ", $this->evaluateData['shipment']['shipment_test_report
                         </td>
                         <td style="vertical-align: middle;text-align: right;">
                             <?php
-                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB/RIF') {
+                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert TB') {
                                     echo $result['ref_mtb_rif_probe_e'];
                                 } else if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB Ultra') {
                                     echo $result['ref_ultra_probe_rpo_b1'];
@@ -514,7 +514,7 @@ $reportDate = explode(" ", $this->evaluateData['shipment']['shipment_test_report
                         </td>
                         <td style="vertical-align: middle;text-align: right;">
                             <?php
-                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB/RIF') {
+                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert TB') {
                                     echo $result['ref_mtb_rif_probe_b'];
                                 } else if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB Ultra') {
                                     echo $result['ref_ultra_probe_rpo_b2'];
@@ -523,7 +523,7 @@ $reportDate = explode(" ", $this->evaluateData['shipment']['shipment_test_report
                         </td>
                         <td style="vertical-align: middle;text-align: right;">
                             <?php
-                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB/RIF') {
+                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert TB') {
                                     echo $result['ref_mtb_rif_probe_spc'];
                                 } else if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB Ultra') {
                                     echo $result['ref_ultra_probe_rpo_b3'];
@@ -532,7 +532,7 @@ $reportDate = explode(" ", $this->evaluateData['shipment']['shipment_test_report
                         </td>
                         <td style="vertical-align: middle;text-align: right;">
                             <?php
-                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB/RIF') {
+                                if ($this->evaluateData['shipment']['assay_name'] == 'Xpert TB') {
                                     echo $result['ref_mtb_rif_probe_a'];
                                 } else if ($this->evaluateData['shipment']['assay_name'] == 'Xpert MTB Ultra') {
                                     echo $result['ref_ultra_probe_rpo_b4'];

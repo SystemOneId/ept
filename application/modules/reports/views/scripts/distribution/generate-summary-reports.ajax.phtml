@@ -67,7 +67,7 @@ if ($this->result['shipment'] != "") {
     $pdf->AddPage();
     $pdf->SetFont('Helvetica', '', 8);
     $labInfo = '<h3 style="width:100%;text-align:center;margin: 0;padding:0;">' . $this->result['shipment']['distribution_code'] . '</h3>';
-    $labInfo .= '<p style="width:100%;font-size:10pt;">Xpert TB Proficiency Testing (XTPT) Program Dried Tube Specimen (DTS) panels are prepared in house at the US Centers for Disease Control and Prevention (CDC), Center for Global Health, Division of Global HIV and TB, International Laboratory Branch (ILB) from known, well-characterized, heat-inactivated mycobacterial isolates. All panels are designed to cover the range of possible Xpert MTB/RIF or Xpert MTB/RIF Ultra (Ultra) qualitative results but are not specific to semi-quantitative result ranges. All samples are verified to be non-viable (no growth in inactivation verification culture), 100% accurate (yielding expected test result), and precise (within 3 standard deviations (SD) of the mean for Xpert MTB/RIF Probe A cycle threshold). Verification sampling is determined using a statistical sample size collection tool and the calculated historical variance (SD).</p>';
+    $labInfo .= '<p style="width:100%;font-size:10pt;">Xpert TB Proficiency Testing (XTPT) Program Dried Tube Specimen (DTS) panels are prepared in house at the US Centers for Disease Control and Prevention (CDC), Center for Global Health, Division of Global HIV and TB, International Laboratory Branch (ILB) from known, well-characterized, heat-inactivated mycobacterial isolates. All panels are designed to cover the range of possible Xpert TB or Xpert TB Ultra (Ultra) qualitative results but are not specific to semi-quantitative result ranges. All samples are verified to be non-viable (no growth in inactivation verification culture), 100% accurate (yielding expected test result), and precise (within 3 standard deviations (SD) of the mean for Xpert TB Probe A cycle threshold). Verification sampling is determined using a statistical sample size collection tool and the calculated historical variance (SD).</p>';
     $labInfo .= '<p style="font-size:10pt;"><strong style="font-size:10pt;">Expected Results</strong></p>';
     $labInfo .= '<table cellpadding="2" style="width:100%;font-size:8pt;">';
     $labInfo .= '    <tr>';
@@ -150,7 +150,7 @@ if ($this->result['shipment'] != "") {
     $participationSvg .= '    <rect width="30" height="' . (($this->result['aggregates']['mtb_rif'] / ($testMethodYAxisMultiplier * 10)) * 100) . '" x="250" y="' . (100 - (($this->result['aggregates']['mtb_rif'] / ($testMethodYAxisMultiplier * 10)) * 100) + 50) . '" fill="#4F81BD" />';
     $participationSvg .= '    <text x="265" y="' . (107 - (($this->result['aggregates']['mtb_rif'] / ($testMethodYAxisMultiplier * 10)) * 100) + 50) . '" dominant-baseline="hanging" text-anchor="middle" style="fill:#FFFFFF;font-family:helvetica;font-size:5pt">'.round($this->result['aggregates']['mtb_rif'], 1).'</text>';
     $participationSvg .= '    <text x="265" y="158" dominant-baseline="middle" text-anchor="middle" style="fill:#666666;font-family:helvetica;font-size:5pt">Sites testing</text>';
-    $participationSvg .= '    <text x="265" y="165" dominant-baseline="middle" text-anchor="middle" style="fill:#666666;font-family:helvetica;font-size:5pt">Xpert MTB/RIF</text>';
+    $participationSvg .= '    <text x="265" y="165" dominant-baseline="middle" text-anchor="middle" style="fill:#666666;font-family:helvetica;font-size:5pt">Xpert TB</text>';
     $participationSvg .= '    <rect width="30" height="' . (($this->result['aggregates']['mtb_rif_ultra'] / ($testMethodYAxisMultiplier * 10)) * 100) . '" x="325" y="' . (100 - (($this->result['aggregates']['mtb_rif_ultra'] / ($testMethodYAxisMultiplier * 10)) * 100) + 50) . '" fill="#4F81BD" />';
     $participationSvg .= '    <text x="340" y="' . (107 - (($this->result['aggregates']['mtb_rif_ultra'] / ($testMethodYAxisMultiplier * 10)) * 100) + 50) . '" dominant-baseline="hanging" text-anchor="middle" style="fill:#FFFFFF;font-family:helvetica;font-size:5pt">'.round($this->result['aggregates']['mtb_rif_ultra'], 1).'</text>';
     $participationSvg .= '    <text x="340" y="158" dominant-baseline="middle" text-anchor="middle" style="fill:#666666;font-family:helvetica;font-size:5pt">Sites testing</text>';
@@ -161,7 +161,7 @@ if ($this->result['shipment'] != "") {
 
     $labInfo = '<table cellpadding="3" style="width:100%;font-size:8pt;">';
     $labInfo .= '    <tr style="background-color:#777777;color:#ffffff;">';
-    $labInfo .= '	     <td style="text-align:center;border-top:solid 10px #000000;border-bottom:solid 10px #000000;" colspan="' . (count($this->result['mtbRifReportSummary']) + 1) . '"><strong>Summary of All Reporting Sites Testing Xpert MTB/RIF</strong></td>';
+    $labInfo .= '	     <td style="text-align:center;border-top:solid 10px #000000;border-bottom:solid 10px #000000;" colspan="' . (count($this->result['mtbRifReportSummary']) + 1) . '"><strong>Summary of All Reporting Sites Testing Xpert TB</strong></td>';
     $labInfo .= '    </tr>';
     $labInfo .= '    <tr>';
     $labInfo .= '	     <td style="width:40%;"></td>';
@@ -235,7 +235,7 @@ if ($this->result['shipment'] != "") {
     if (isset($this->result['mtbRifUltraReportSummary']) && count($this->result['mtbRifUltraReportSummary']) > 0) {
         $labInfo .= '<table cellpadding="3" style="width:100%;font-size:8pt;">';
         $labInfo .= '    <tr style="background-color:#777777;color:#ffffff;">';
-        $labInfo .= '	     <td style="text-align:center;border-top:solid 10px #000000;border-bottom:solid 10px #000000;" colspan="' . (count($this->result['mtbRifUltraReportSummary']) + 1) . '"><strong>Summary of All Reporting Sites Testing Xpert MTB/RIF Ultra</strong></td>';
+        $labInfo .= '	     <td style="text-align:center;border-top:solid 10px #000000;border-bottom:solid 10px #000000;" colspan="' . (count($this->result['mtbRifUltraReportSummary']) + 1) . '"><strong>Summary of All Reporting Sites Testing Xpert TB Ultra</strong></td>';
         $labInfo .= '    </tr>';
         $labInfo .= '    <tr>';
         $labInfo .= '	     <td style="width:40%;"></td>';
@@ -338,7 +338,7 @@ if ($this->result['shipment'] != "") {
     $panelPerformanceMtbRifSvg = '<?xml version="1.0" encoding="UTF-8"?>';
     $panelPerformanceMtbRifSvg .= '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">';
     $panelPerformanceMtbRifSvg .= '    <rect width="300" height="300" x="0" y="0" stroke="#E4E4E4" stroke-width="1" fill="white" />';
-    $panelPerformanceMtbRifSvg .= '    <text x="150" y="12" dominant-baseline="middle" text-anchor="middle" style="fill:#666666;font-family:helvetica;font-size:6pt">'.$this->result['shipment']['distribution_code'].' Panel Performance Determined by Testing with Xpert MTB/RIF</text>';
+    $panelPerformanceMtbRifSvg .= '    <text x="150" y="12" dominant-baseline="middle" text-anchor="middle" style="fill:#666666;font-family:helvetica;font-size:6pt">'.$this->result['shipment']['distribution_code'].' Panel Performance Determined by Testing with Xpert TB</text>';
     $panelPerformanceMtbRifSvg .= '    <text x="15" y="150" transform="rotate(-90, 15, 150)" text-anchor="middle" style="fill:#666666;font-family:helvetica;font-size:6pt">Cycle Thresholds (Ct)</text>';
     $ctMaxYAxisValueMtbRif = 0;
     foreach ($this->result['mtbRifReportSummary'] as $sampleSummary) {
@@ -393,7 +393,7 @@ if ($this->result['shipment'] != "") {
     $panelPerformanceMtbRifSvg .= '</svg>';
     $pdf->ImageSVG('@' . $panelPerformanceMtbRifSvg, 15, 35, 150, 150, '', '', '', 0, false);
 
-    $pdf->writeHTML('<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p style="font-size:10pt;">Xpert MTB/RIF and Ultra are both real time polymerase chain reaction (RT-PCR) assays that utilize fluorescent probes to signal presence of Mycobacterium tuberculosis complex (MTBC) DNA. Each GeneXpert instrument module detects an accumulation of fluorescent signal produced by the RT-PCR reactions over time. The cycle threshold (Ct) is defined as the number of RT-PCR cycles required for the fluorescent signal to cross the threshold needed for the instrument to determine positivity. This analysis examines the Ct for Probe A for Xpert MTB/RIF, or the first rpoB probe to be detected for Ultra, comparing the mean achieved during panel verification (CDC/ILB) prior to panel dispatch to the mean calculated from results submitted by field testing sites. An increase in Ct value represents a decrease in the quantity of MTBC DNA detected, while a decrease in Ct value represents an increase in the quantity of MTBC DNA detected.</p>', true, false, true, false, '');
+    $pdf->writeHTML('<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p style="font-size:10pt;">Xpert TB and Ultra are both real time polymerase chain reaction (RT-PCR) assays that utilize fluorescent probes to signal presence of Mycobacterium tuberculosis complex (MTBC) DNA. Each GeneXpert instrument module detects an accumulation of fluorescent signal produced by the RT-PCR reactions over time. The cycle threshold (Ct) is defined as the number of RT-PCR cycles required for the fluorescent signal to cross the threshold needed for the instrument to determine positivity. This analysis examines the Ct for Probe A for Xpert TB, or the first rpoB probe to be detected for Ultra, comparing the mean achieved during panel verification (CDC/ILB) prior to panel dispatch to the mean calculated from results submitted by field testing sites. An increase in Ct value represents a decrease in the quantity of MTBC DNA detected, while a decrease in Ct value represents an increase in the quantity of MTBC DNA detected.</p>', true, false, true, false, '');
     $pdf->AddPage();
     if (isset($this->result['mtbRifUltraReportSummary']) && count($this->result['mtbRifUltraReportSummary']) > 0) {
         $pdf->writeHTML('<p style="font-size:10pt;"><strong style="font-size:10pt;">Panel Performance (continued)</strong></p>', true, false, true, false, '');

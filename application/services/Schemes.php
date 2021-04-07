@@ -13,7 +13,7 @@ class Application_Service_Schemes {
         $userAgent = new Zend_Http_UserAgent();
         foreach ($res as $row) {
             if ($userAgent->getUserAgent() == "okhttp/3.4.1") {
-                if ($row['name'] == "Xpert MTB/RIF") {
+                if ($row['name'] == "Xpert TB") {
                     $response[$row['id']] = $row['name'];
                 }
             } else {

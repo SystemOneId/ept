@@ -5629,7 +5629,7 @@ class Application_Service_Reports {
                         $this->getTbAllSitesResultsSheet($db, $params['shipmentId'], $excel, $sheetIndex);
                         $nonConcordanceThreshold = 2;
                         $expectedConcordance = 0.8;
-                        $mtbRifAssayName = "Xpert MTB/RIF";
+                        $mtbRifAssayName = "Xpert TB";
                         $mtbRifSubmissions = $db->query("SELECT s.shipment_id,
             s.shipment_code,
             LPAD(p.unique_identifier, 10, '0') AS sorting_unique_identifier,
