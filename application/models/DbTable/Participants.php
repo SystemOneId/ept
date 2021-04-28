@@ -10,7 +10,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             ->where("pmm.dm_id = ?", $userSystemId)
             ->group('p.participant_id'));
     }
-
 	public function checkParticipantAccess($participantId){
 		$authNameSpace =  new Zend_Session_Namespace('datamanagers');
 		$row = $this->getAdapter()->fetchRow($this->getAdapter()->select()
@@ -1263,6 +1262,29 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $output['aaData'][] = $row;
         }
         echo json_encode($output);
+    }
+
+
+    // public function getUAttentionRequiredParticipants($params,$start_date,$end_date) {
+    public function getUAttentionRequiredParticipants($params) {
+        return $this->getAdapter()->fetchAll($this->getAdapter()->select()->from(array('spm' => 'shipment_participant_map'),
+            array('map_id','attributes','participant_id','shipment_id',
+                'user_comment','shipment_score','date_submitted',
+                'is_pt_test_not_performed',
+                'pt_test_not_performed_comments'))
+            ->join(array('p' => 'participant'), 'spm.participant_id = p.participant_id',
+            array('participant_id', 'lab_name'))
+            ->join(array('s' => 'shipment'), 's.shipment_id = spm.shipment_id',
+            array('status'))
+            ->join(array('ref' => 'reference_result_tb'), 'spm.shipment_id=ref.shipment_id',
+            array('sample_label', 'mandatory', 'sample_id'))
+            ->join(array('c' => 'countries'), 'c.id=p.country',
+            array('iso_name'))
+            // ->where('spm.date_submitted != ?', '')
+            // ->where('s.status = ?', 'evaluated')
+            // ->where("date_submitted >= ?",  $start_date)
+            // ->where("date_submitted <= ?",  $end_date)
+            ->group('p.participant_id'));
     }
 }
 

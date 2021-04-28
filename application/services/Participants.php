@@ -676,5 +676,88 @@ class Application_Service_Participants {
 				error_log($exc->getTraceAsString());
 		}
 	}
+
+
+    public function getUAttentionRequiredParticipants($params) {
+		$participantDb = new Application_Model_DbTable_Participants();
+
+        // $current = new Zend_Date();
+        // // $date->setTimezone("UTC");
+        // $current->sub('1', 'MM');
+        // echo $current->get("yyyy-MM");
+        // $start_date = $current->get("yyyy-MM");
+        // $end_date =$current->get("yyyy-MM");
+        // $participants=$participantDb->getUAttentionRequiredParticipants($params,$start_date->get(),$end_date->get());
+        $participants=$participantDb->getUAttentionRequiredParticipants($params);
+		
+        // print('<pre>');
+        // print_r($participants);
+        // print('</pre>');
+        $iDisplayStart=$params['iDisplayStart'];
+        $output = array(
+            "sEcho" => "scheme",
+            "iTotalRecords" => $params['iDisplayLength'],
+            "iTotalDisplayRecords" => 40,
+            "aaData" => array()
+        );
+        $data=[];
+        foreach($participants as $key => $participant){
+            $attributes=json_decode($participant['attributes']);
+            if(isset($attributes->count_errors_encountered_over_month)){
+                if($participant['is_pt_test_not_performed'] == "yes"){
+                    $error_rate=0;
+                    if(isset($attributes->count_errors_encountered_over_month) && isset($attributes->count_tests_conducted_over_month) && intval($attributes->count_tests_conducted_over_month) > 0 ){
+                        $error_rate=(intval($attributes->count_errors_encountered_over_month)/intval($attributes->count_tests_conducted_over_month))*100;
+                    }
+                    if($error_rate > 5 || $participant['shipment_score'] != '100'){
+                        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+                        $results=$db->fetchAll($db->select()->from(array('res' => 'response_result_tb'),
+                            array('instrument_serial'))
+                            ->join(array('ins' => 'instrument'),'ins.instrument_serial = res.instrument_serial')
+                            ->where('res.shipment_map_id = ?',$participant['map_id']) 
+                            ->where('res.sample_id = ?',$participant['sample_id']) 
+                            ->where('res.instrument_serial != ?',' ')
+                            ->where('ins.participant_id = ?',$participant['participant_id']) 
+                        );
+                        $instrument_used="";
+                        foreach($results as $res){
+                            $instrument_used=$res['instrument_serial'].",".$res['instrument_installed_on'].','.$res['instrument_last_calibrated_on'].'';
+                        }
+                        $data[]=[
+                            $participant['participant_id'],
+                            $participant['lab_name'],
+                            $participant['iso_name'],
+                            $participant['shipment_score'],
+                            isset($attributes->count_errors_encountered_over_month)?$attributes->count_errors_encountered_over_month:"",
+                            isset($attributes->count_tests_conducted_over_month)?$attributes->count_tests_conducted_over_month:"",
+                            $error_rate,
+                            "",
+                            $instrument_used,
+                            isset($attributes->expiry_date)?$attributes->expiry_date:"",
+                            $participant['user_comment'],
+                        ];
+                    }
+                }else
+                if($participant['is_pt_test_not_performed'] == "no"){
+                    $data[]=[
+                        $participant['participant_id'],
+                        $participant['lab_name'],
+                        $participant['iso_name'],
+                        $participant['shipment_score'],
+                        " ",
+                        " ",
+                        0,
+                        $participant['pt_test_not_performed_comments'],
+                        " ",
+                        " ",
+                        $participant['user_comment'],
+                    ];
+                }
+            }
+        }
+        $output['aaData']=$data;
+        return  $output;
+	}
+
 }
 

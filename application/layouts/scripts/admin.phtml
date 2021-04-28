@@ -274,6 +274,11 @@
                                 XTPT Indicators
                                 </a>
                             </li>
+                            <li>
+                                <a href="<?php echo $this->url(array('module'=>'reports','controller'=>'Xtpt-indicators','action'=>'participant-attention'),'default',true); ?>">
+                                    XTPT Indicators Report Expansion
+                                </a>
+                            </li>
                             <?php if ($adminSession->is_ptcc_coordinator == 0) { ?>
                             <li>
                                 <a href="<?php echo $this->url(array('module'=>'reports','controller'=>'tb-results','action'=>'index'),'default',true); ?>">

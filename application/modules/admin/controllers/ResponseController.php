@@ -80,6 +80,7 @@ class Admin_ResponseController extends Zend_Controller_Action
                 }
                 $responseService = new Application_Service_Response();
                 $this->view->responseData = $responseService->editResponse($sid,$pid,$scheme);
+
                 $globalConfigDb = new Application_Model_DbTable_GlobalConfig();
                 $this->view->customField1 = $globalConfigDb->getValue('custom_field_1');
                 $this->view->customField2 = $globalConfigDb->getValue('custom_field_2');
@@ -99,6 +100,9 @@ class Admin_ResponseController extends Zend_Controller_Action
                         $responseService->getOtherUnenrolledParticipants(
                             $sid, $pid, $transferToParticipantId);
                 }
+                echo"<pre>";
+                print_r($this->view->responseData);
+                echo"</pre>";
             } else {
                 $this->_redirect("/admin/response/");
             }

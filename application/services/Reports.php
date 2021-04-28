@@ -5668,9 +5668,9 @@ class Application_Service_Reports {
             AND IFNULL(spm.is_excluded, 'no') = 'no'
             AND a.name = ?
             ORDER BY sorting_unique_identifier ASC, res.sample_id ASC;", array($params['shipmentId'], $mtbRifAssayName))
-                            ->fetchAll();
-                        if (count($mtbRifSubmissions) > 0) {
-                            $mtbRifStability = $db->query("SELECT stability_mtb_rif.shipment_id,
+                ->fetchAll();
+            if (count($mtbRifSubmissions) > 0) {
+                $mtbRifStability = $db->query("SELECT stability_mtb_rif.shipment_id,
             stability_mtb_rif.shipment_code,
             stability_mtb_rif.assay,
             stability_mtb_rif.sample_label,
