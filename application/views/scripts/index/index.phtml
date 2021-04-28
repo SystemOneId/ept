@@ -1,136 +1,988 @@
-<?php
-$authNameSpace = new Zend_Session_Namespace('datamanagers');
-?>
-<div class="col-lg-12">
-    <?php
-    if(isset($this->banner['image']) && trim($this->banner['image'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'home-banner'. DIRECTORY_SEPARATOR . $this->banner['image'])){
-    ?>
-       <img src="/uploads/home-banner/<?php echo $this->banner['image']; ?>" style="width:100%;" />
-    <?php } ?>
-</div>
-<?php if(!isset($authNameSpace->dm_id)){ ?>
-<div class="col-lg-12">
-   <a class="btn btn-danger btn-lg col-lg-6" style="color:#fff;" href="<?php echo $this->url(array("controller"=>"auth","action"=>"login"),null,true) ?>"><i class="icon icon-lock"></i> <span>Click here for Participant Login</span></a>
-   <span class="col-lg-1"></span>
-   <a class="btn btn-danger btn-lg  col-lg-5" style="color:#fff;" href="<?php echo $this->url(array("controller"=>"contact-us","action"=>"index"),null,true) ?>"><i class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
-<br>
-</div>
-<?php } ?>
-<div class="col-lg-12" style="float: left;margin-top:30px;">
-    <div class="col-lg-8">
-        <h1>Welcome to <strong> [ <img src="<?php echo $this->baseUrl("images/ept.jpg"); ?>"  width="50" height="40" /> ]</strong> Program!</h1>
-        <p>
-		 Proficiency Testing enable laboratories to assess their performance in conducting test methods within their own laboratories when their data are compared against other laboratories that participate in the same program.
-		</p>
-		 <br><br>
-        <h3 class="p2">What Can We Do For You Through PT Program?</h3>
-        <div class="row">
-                <div class="col-lg-12">
-                    <div class="col-lg-6">
+<style>
+    .staticContentContainer {
+        width: 100%;
+        float: left;
+    }
 
-                        <h3 class="txt">Training</h3>
-                        <div style="float:left;">
-                            <img alt="" src="<?php echo $this->baseUrl("images/1page_img4.jpg"); ?>" class="img-left" />
-                        </div>
-                        <div style="margin-left:5px;float:left;width:210px;">
-                            <ul style="float:left;">
-                                <li>Panel preparation</li>
-                                <li>e-pt database training; results entry and validation, reports viewing and reports download</li>
-                                <li>Corrective actions</li>
-                            </ul>
-                        </div>
-                        <br class="clear" />
-                    </div>
-                    <div class="col-lg-6">
+    .staticContentContainer img {
+        max-width: 100%;
+    }
 
-                        <h3 class="txt">Participation in PT</h3>
-                        <div style="float:left;">
-                            <img alt="" src="<?php echo $this->baseUrl("images/1page_img7.jpg"); ?>" class="img-left" />
+    .staticContentContainer h1, .staticContentContainer h2 {
+        text-transform: uppercase;
+    }
+
+    .contactInformationContainer {
+        border: solid 1px #000000;
+        width: 100%;
+    }
+
+    .contactInformationContainer td {
+        width: 50%;
+        padding: 1em;
+    }
+
+    .contactInformationContainer .contactName {
+        text-decoration: underline;
+        font-style: italic;
+    }
+
+    .staticContentContainer ul {
+        list-style-type: ;
+    }
+
+    .circleContainer {
+        position: relative;
+        width: 100%;
+        padding-top: 100%;
+        float: left;
+    }
+
+    .segmentContainer {
+        position: absolute;
+        overflow: hidden;
+        -webkit-transition: 0.25s ease-in-out;
+        -moz-transition: 0.25s ease-in-out;
+        -o-transition: 0.25s ease-in-out;
+        transition: 0.25s ease-in-out;
+    }
+
+    .segmentContainer.left {
+        left: 0;
+        right: 49.8%;
+    }
+
+    .segmentContainer.right {
+        left: 50.2%;
+        right: 0;
+    }
+
+    .segmentContainer.top {
+        top: 0;
+        bottom: 49.8%;
+    }
+
+    .segmentContainer.bottom {
+        top: 50.2%;
+        bottom: 0;
+    }
+
+    .segmentContainer .circleSegment {
+        position: absolute;
+        border-radius: 50%;
+        width: 160%;
+        height: 160%;
+        border: solid 0.4em rgb(249, 249, 249);
+        -webkit-transition: 0.25s ease-in-out;
+        -moz-transition: 0.25s ease-in-out;
+        -o-transition: 0.25s ease-in-out;
+        transition: 0.25s ease-in-out;
+    }
+
+    .segmentContainer:hover .circleSegment {
+        -webkit-transform: scale(1.05);
+        -moz-transform: scale(1.05);
+        -o-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+    }
+
+    .segmentContainer.top.left > .circleSegment {
+        background-color: #ED7D31;
+        top: 20%;
+        right: -80%;
+    }
+
+    .segmentContainer.top.right > .circleSegment {
+        background-color: #D17B5C;
+        top: 20%;
+        left: -80%;
+    }
+
+    .segmentContainer.bottom.left > .circleSegment {
+        background-color: #A5A5A5;
+        top: -80%;
+        right: -80%;
+    }
+
+    .segmentContainer.bottom.right > .circleSegment {
+        background-color: #B98A82;
+        top: -80%;
+        left: -80%;
+    }
+
+    .segmentContainer > .circleSegment > div {
+        width: 22%;
+        height: 30%;
+        position: relative;
+    }
+
+    .segmentContainer > .circleSegment > div > h3 {
+        text-transform: uppercase;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+        white-space: nowrap;
+        word-break: keep-all;
+    }
+
+    .segmentContainer.left > .circleSegment > div {
+        float: right;
+        margin-right: 65%;
+    }
+
+    .segmentContainer.right > .circleSegment > div {
+        float: left;
+        margin-left: 55%;
+    }
+
+    .segmentContainer.top > .circleSegment > div {
+        margin-top: 12%;
+    }
+
+    .segmentContainer.bottom > .circleSegment > div {
+        margin-top: 54%;
+    }
+
+    .segmentContainer.top > .circleSegment > div > h3 {
+        bottom: 0;
+    }
+
+    .segmentContainer.bottom > .circleSegment > div > h3 {
+        top: 0;
+    }
+
+    .segmentContainer > .circleSegment > div > img {
+        height: 80%;
+    }
+
+    .segmentContainer.top > .circleSegment > div > img {
+        margin-bottom: 10%;
+    }
+
+    .segmentContainer.bottom > .circleSegment > div > img {
+        margin-top: 25%;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .segmentContainer > .circleSegment > div > h3 {
+            font-size: 1em;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        .segmentContainer > .circleSegment > div > img {
+            height: 60%;
+        }
+
+        .segmentContainer.top > .circleSegment > div > img {
+            margin-bottom: 50%;
+        }
+
+        .segmentContainer.bottom > .circleSegment > div > img {
+            margin-top: 50%;
+        }
+    }
+
+    .centerCycle {
+        position: absolute;
+        width: 12%;
+        height: 12%;
+        left: 44%;
+        top: 44%;
+    }
+
+    .centerCycle img {
+        width: 90%;
+        height: 40%;
+        margin: 5%;
+    }
+
+    .segmentContainer.active {
+        top: 0;
+        bottom: 85%;
+        right: 85%;
+        left: 0;
+    }
+
+    .popOutPanel {
+        border: solid 0.3em #000000;
+        border-radius: 2em;
+        position: absolute;
+        height: 29%;
+        width: 39%;
+        overflow: hidden;
+        padding: 1em;
+        -webkit-transition: 0.25s ease-in-out;
+        -moz-transition: 0.25s ease-in-out;
+        -o-transition: 0.25s ease-in-out;
+        transition: 0.25s ease-in-out;
+    }
+
+    .popOutPanel.bottom ul {
+        padding-left: 1em;
+    }
+
+    .popOutPanel.top {
+        top: 10%;
+        bottom: 39%;
+    }
+
+    .popOutPanel.bottom {
+        top: 61%;
+        bottom: 10%;
+    }
+
+    .popOutPanel.bottom ul {
+        margin-top: 10%;
+    }
+
+    .popOutPanel.left {
+        left: 0;
+        right: 39%;
+        margin-right: 10%;
+    }
+
+    .popOutPanel.left ul {
+        margin-right: 15%;
+    }
+
+    .popOutPanel.right {
+        left: 51%;
+        right: 0;
+        margin-left: 10%;
+    }
+
+    .popOutPanel.right ul {
+        margin-left: 10%;
+    }
+
+    .popOutPanel.right ul a {
+        display: none;
+    }
+
+    .popOutPanel .showWhenActive {
+        display: none;
+    }
+
+    .popOutPanel .hideWhenActive {
+        display: block;
+    }
+
+    .popOutPanel .listItemContainer {
+        width: 100%;
+        padding: 0 1em;
+    }
+
+    .popOutPanel .listItemContainer img {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .popOutPanel .listItemContainer div {
+        display: inline-block;
+        max-width: 85%;
+        padding: 1em;
+    }
+
+    .popOutPanel .listItemContainer div.narrow {
+        max-width: 40%;
+    }
+
+    .popOutPanel.top.left {
+        border-color: #ED7D31;
+    }
+
+    .popOutPanel.top.right {
+        border-color: #D17B5C;
+    }
+
+    .popOutPanel.bottom.left {
+        border-color: #A5A5A5;
+    }
+
+    .popOutPanel.bottom.right {
+        border-color: #B98A82;
+    }
+
+    .popOutPanel .textShifter {
+        border-radius: 50%;
+        width: 160%;
+        height: 160%;
+        margin: 0;
+        clear: both;
+        background-color: rgb(249, 249, 249);
+        visibility: hidden;
+        opacity: 0;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+        filter: alpha(opacity=0);
+    }
+
+    .popOutPanel.left .textShifter {
+        float: right;
+        margin-right: -80%;
+    }
+
+    .popOutPanel.right .textShifter {
+        float: left;
+        margin-left: -65%;
+    }
+
+    .popOutPanel.top .textShifter {
+        vertical-align: bottom;
+        margin-top: 20%;
+    }
+
+    .popOutPanel.bottom .textShifter {
+        margin-top: -80%;
+    }
+
+    .popOutPanel.top.left .textShifter {
+        shape-outside: ellipse(50% 50% at 50% 60%);
+        -webkit-clip-path: ellipse(50% 50% at 50% 60%);
+        clip-path: ellipse(50% 50% at 50% 60%);
+        -webkit-shape-outside: ellipse(50% 50% at 50% 60%);
+    }
+
+    .popOutPanel.top.right .textShifter {
+        shape-outside: ellipse(50% 50% at 50% 60%);
+        -webkit-clip-path: ellipse(50% 50% at 50% 60%);
+        clip-path: ellipse(50% 50% at 50% 60%);
+        -webkit-shape-outside: ellipse(50% 50% at 50% 60%);
+    }
+
+    .popOutPanel.bottom.left .textShifter {
+        shape-outside: ellipse(100% 100% at 100% 0);
+        -webkit-clip-path: ellipse(100% 100% at 100% 0);
+        clip-path: ellipse(100% 100% at 100% 0);
+        -webkit-shape-outside: ellipse(100% 100% at 100% 0);
+    }
+
+    .popOutPanel.bottom.right .textShifter {
+        shape-outside: ellipse(100% 100% at 0 0);
+        -webkit-clip-path: ellipse(100% 100% at 0 0);
+        clip-path: ellipse(100% 100% at 0 0);
+        -webkit-shape-outside: ellipse(100% 100% at 0 0);
+    }
+
+    .popOutPanel.active {
+        left: 12%;
+        top: 5%;
+        bottom: 5%;
+        width: 84%;
+        height: 91%;
+        margin: 0;
+    }
+
+    .popOutPanel.active ul {
+        margin: 0 !important;
+        list-style: none;
+    }
+
+    .popOutPanel.active ul a {
+        display: inline !important;
+    }
+
+    .popOutPanel.active .showWhenActive {
+        display: block !important;
+    }
+
+    .popOutPanel.active .hideWhenActive {
+        display: none !important;
+    }
+
+    .popOutPanel.active .textShifter {
+        display: none;
+    }
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        .popOutPanel.right .hideWhenActive {
+            float: right;
+        }
+
+        .popOutPanel .hideWhenActive {
+            width: 35%;
+        }
+
+        .popOutPanel .textShifter {
+            display: none;
+        }
+    }
+      .card{
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        
+      }
+      .card-group >.card{
+        margin: .5rem!important;
+
+      }
+      .result-card > .col-md-6{
+        padding :.5rem!important;
+
+      }
+      .result-card > .col-md-6 >.card{
+        width: 100%;
+      }
+      .card-group {
+          line-height: 1.5;
+          color: #212529;
+          text-align: left;
+          box-sizing: border-box;
+          margin-right: -15px;
+          margin-left: -15px;
+          display: flex;
+          flex-flow: row wrap;
+      }
+      .justify-content-center {
+            justify-content: center!important;
+        }
+      @media (min-width: 576px){
+        .card-group>.card {
+            flex: 1 0 0%;
+        }
+      }
+    .p-5 {
+        padding-top: 3rem!important;
+        padding-bottom: 3rem!important;
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    .col-md-6{
+        width: 100%;
+    }
+
+    @media (min-width: 768px){
+          .col-md-6 {
+              max-width: 50%;
+          } 
+    }
+    .col-md-10{
+        overflow: auto;
+    }
+
+</style>
+<div class="staticContentContainer">
+    <h1>Welcome to <strong>[XTPT]</strong> Program</h1>
+    <p>
+        Xpert TB Proficiency Test panels are prepared in house at the US Centers for Disease Control and Prevention
+        (CDC), Center for Global Health, Division of Global HIV and TB, International Laboratory Branch (ILB) from
+        known, well-characterized, heat-inactivated mycobacterial isolates.
+    </p>
+    <div class="circleContainer">
+        <div class="popOutPanel top left">
+            <div class="textShifter"></div>
+            <ul class="hideWhenActive">
+                <li>XMPEP DTS Testing Instructions</li>
+            </ul>
+            <ul class="showWhenActive">
+                <h4 class="text-center">Assessment</h4>
+                <hr>
+                <div class="row card-group justify-content-center">
+                    <div class="col-md-6  card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2 ">
+                                <img src="/images/document_icon.png" alt="" title="" style="margin-top: 5px;" />
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <span>XTPT DTS Testing Job Aid</span>
+                                <br>
+                                <span>[<a  href="<?php echo $this->baseUrl('docs/XTPT_DTS_Testing_Job_Aid.pdf'); ?>"><?php echo $this->baseUrl('docs/XTPT_DTS_Testing_Job_Aid.pdf'); ?></a>]</span>
+                            </div>
                         </div>
-                        <div style="margin-left:5px;float:left;width:210px;">
-                            <ul style="float:left;">
-                                <li>List of all PT sites enrolled in the current pt event with site's unique number, names of contact persons, e-mail address, phone numbers of contact persons</li>
-                                <li>List of pt events with the number of sites enrolled</li>
-                            </ul>
-                        </div>
-                        <br class="clear" />
                     </div>
                 </div>
-
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-
-                    <h3 class="txt">Technical Assistance</h3>
-                    <div style="float:left;">
-                        <img alt="" src="<?php echo $this->baseUrl("images/1page_img6.jpg"); ?>" class="img-left" />
+            </ul>
+        </div>
+        <div class="popOutPanel top right">
+            <div class="textShifter"></div>
+            <ul class="hideWhenActive">
+                <li>
+                    Planning for country transition to Xpert MTB RIF Ultra cartridges
+                </li>
+                <li>
+                    FIND Implementation Guidance & Support
+                </li>
+                <li>
+                    FIND Roadmap to GeneXpert Implementation
+                </li>
+                <li>
+                    FIND Tuberculosis SOPs
+                </li>
+            </ul>
+            <ul class="showWhenActive">
+                <h4 class="text-center">Process/Programs</h4>
+                <hr>
+                <div class="row card-group justify-content-center">
+                    <div class="col-md-6 card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2">
+                                <img src="/images/planning.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                 <span>Planning for country transition to Xpert MTB/RIF Ultra cartridges</span>
+                                <br/>
+                                <span>[<a href="http://www.stoptb.org/wg/gli/assets/documents/GLI_ultra.pdf">http://www.stoptb.org/wg/gli/assets/documents/GLI_ultra.pdf</a>]</span>
+                            </div>
+                        </div>
                     </div>
-                    <div style="margin-left:5px;float:left;width:210px;">
-                        <ul style="float:left;">
-                            <li>Panel preparation assistance</li>
-                            <li>Results entry and validation, reports viewing and reports download assistance (remote technical assistance and on-site technical assistance for using e-pt database)</li>
-                        </ul>
+                    <div class="col-md-6 card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2">
+                                <img src="/images/FIND_implementation_guidance.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <span>FIND Implementation guidance & Support</span>
+                                <br/>
+                                <span>[<a href="https://www.finddx.org/implementation-resources/#tb">https://www.finddx.org/implementation-resources/#tb</a>]</span>
+                            </div>
+                        </div>
                     </div>
-                    <br class="clear" />
                 </div>
-                <div class="col-lg-6">
+                <div class="row card-group justify-content-center">
+                    <div class="col-md-6 card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2">
+                                <img src="/images/WHO_meeting_report.png" alt="" title=""/>
 
-                    <h3 class="txt">Evaluation</h3>
-                    <div style="float:left;">
-                        <img alt="" src="<?php echo $this->baseUrl("images/1page_img5.jpg"); ?>" class="img-left" />
+                            </div>
+                            <div class="col-md-10 p-5">
+                                 <span>WHO Meeting Report of a Technical Expert Consultation: Non-inferiority analysis of Xpert MTB/RIF Ultra compared to Xpert MTB/RIF</span>
+                                <br/>
+                                <span>[<a href="https://www.who.int/tb/publications/2017/XpertUltra/en/">https://www.who.int/tb/publications/2017/XpertUltra/en/</a>]</span>
+                            </div>
+                        </div>
                     </div>
-                    <div style="margin-left:5px;float:left;width:210px;">
-                        <ul style="float:left;">
-                            <li>Monitoring and evaluation</li>
-                            <li>Graphs of previous rounds of pt results</li>
-                            <li>Performance of various regions in the pt event</li>
-                            <li>Feedback reports to participants at the end of every pt event</li>
-                        </ul>
+                    <div class="col-md-6 card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2">
+                                <img src="/images/FIND_roadmap_genexpert.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <span>FIND Roadmap to GeneXpert implementation</span>
+                                <br/>
+                                <span>[<a href="https://www.finddx.org/wp-content/uploads/2016/03/Xpert-implementation-roadmap.pdf">https://www.finddx.org/wp-content/uploads/2016/03/Xpert-implementation-roadmap.pdf</a>]</span>
+                            </div>
+                        </div>
                     </div>
-                    <br class="clear" />
+                </div>
+                <div class="row card-group justify-content-center ">
+                    <div class="col-md-6 card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2">
+                                <img src="/images/document_icon.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <span>FIND Tuberculosis SOPs</span>
+                                <br/>
+                                <span>[<a href="https://www.finddx.org/tb-laboratory-standard-operating-procedures-sops/">https://www.finddx.org/tb-laboratory-standard-operating-procedures-sops/</a>]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <div class="popOutPanel bottom left">
+            <div class="textShifter"></div>
+            <ul class="hideWhenActive">
+                <li>
+                    Corrective Action form
+                </li>
+                <li>
+                    Practical Guide to Implementing a Quality Assurance System for Xpert
+                </li>
+                <li>
+                    FIND TB Training Materials & Job Aids
+                </li>
+                <li>
+                    GLI Training Package (Technical Modules for Xpert MTB RIF Ultra)
+                </li>
+                <li>
+                    Cepheid GeneXpert Resources
+                </li>
+            </ul>
+            <ul class="showWhenActive">
+                <h4 class="text-center">Process/Improvments</h4>
+                <hr>
+                <div class="row card-group justify-content-center">
+                    <div class="col-md-6 card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2">
+                                <img src="/images/document_icon.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <span>FIND Corrective Action Form</span>
+                                <br/>
+                                <span>[<a href="<?php echo $this->baseUrl('docs/FIND_Corrective_Action_Form.pdf'); ?>"><?php echo $this->baseUrl('docs/FIND_Corrective_Action_Form.pdf'); ?></a>]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2">
+                                <img src="/images/document_icon.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <span>FIND Deficiency Report</span>
+                                <br/>
+                                <span>[<a href="<?php echo $this->baseUrl('docs/FIND_Deficiency_Report.pdf'); ?>"><?php echo $this->baseUrl('docs/FIND_Deficiency_Report.pdf'); ?></a>]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-group justify-content-center">
+                    <div class="col-md-6 card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2">
+                                <img src="/images/document_icon.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <span>Practical Guide to Implementing a Quality Assurance System for Xpert MTB/RIF Testing & Quick guide to Quality Assurance of Xpert MTB/RIF Testing</span>
+                                <br/>
+                                <span>[<a href="http://www.stoptb.org/wg/gli/pgiqas.asp">http://www.stoptb.org/wg/gli/pgiqas.asp</a>]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 card m-2">
+                            <div class="row justify-content-center">
+                                <div class="col-md-2">
+                                    <img src="/images/document_icon.png" alt="" title=""/>
+                                </div>
+                                <div class="col-md-10 p-5">
+                                    <span>FIND Tuberculosis Training materials & job aids</span>
+                                    <br/>
+                                    <span>[<a href="https://www.finddx.org/implementation-resources/#tb">https://www.finddx.org/implementation-resources/#tb</a>]</span>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row card-group  justify-content-center">
+                    <div class="col-md-6 card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2">
+                                <img src="/images/document_icon.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <span>Laboratory monitoring & evaluation tool Xpert Comprehensive Site Visit Assessment</span>
+                                <br/>
+                                <span>[<a href="https://www.finddx.org/wp-content/uploads/2016/03/Comprehensive-checklist_10-2014.pdf">https://www.finddx.org/wp-content/uploads/2016/03/Comprehensive-checklist_10-2014.pdf</a>]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 card m-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-2">
+                                <img src="/images/document_icon.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <div class="narrow">
+                                    <span>GLI Training Package: Technical Modules for Xpert MTB/RIF (ULTRA)</span>
+                                    <br/>
+                                    <span>[<a href="http://www.stoptb.org/wg/gli/TrainingPackage_XPERT_MTB_RIF_Ultra.asp">http://www.stoptb.org/wg/gli/TrainingPackage_XPERT_MTB_RIF_Ultra.asp</a>]</span>
+                                    <ul>
+                                        <li>Part 2: Technical Modules for Xpert MTB/RIF (ULTRA)</li>
+                                        <li>Module 4: Recording & Reporting Results</li>
+                                        <li>Module 6: Quality Assurance of the Xpert MTB/RIF (Ultra)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-group justify-content-center">
+                    <div class="col-md-6  card m-2">
+                            <div class="row justify-content-center">
+                                <div class="col-md-2">
+                                    <img src="/images/document_icon.png" alt="" title=""/>
+                                </div>
+                                <div class="col-md-10 p-5">
+                                <div class="narrow">
+                                    <span>Cepheid GeneXpert Resources</span>
+                                    <ul>
+                                        <li>
+                                            <a href="<?php echo $this->baseUrl('docs/Xpert_MTB_RIF_Package_Insert_ENGLISH.pdf'); ?>">
+                                                Xpert MTB RIF Package Insert ENGLISH
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo $this->baseUrl('docs/Xpert_MTB_RIF_Ultra_Comparison_Flyer.pdf'); ?>">
+                                                Xpert MTB RIF Ultra Comparison Flyer
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo $this->baseUrl('docs/Xpert_MTB_RIF_Ultra_Datasheet.pdf'); ?>">
+                                                Xpert MTB RIF Ultra Datasheet
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo $this->baseUrl('docs/How_to_Run_an_XpertCheck.pdf'); ?>">
+                                                How to Run an XpertCheck
+                                            </a>
+                                            <ul>
+                                                <li>
+                                                    <a href="<?php echo $this->baseUrl('docs/What_to_do_if_Module_Fails_During_Xpert_Check.pdf'); ?>">
+                                                        What to do if Module Fails During Xpert Check
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo $this->baseUrl('docs/How_to_Clean_and_Replace_Fan_Filters_on_GeneXpert.pdf'); ?>">
+                                                How to Clean and Replace Fan Filters on GeneXpert
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo $this->baseUrl('docs/How_to_Archive_Tests.pdf'); ?>">
+                                                How to Archive Tests
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo $this->baseUrl('docs/GX_Reference_Guide.pdf'); ?>">
+                                                GX Reference Guide
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <div class="popOutPanel bottom right">
+            <div class="textShifter"></div>
+            <ul class="hideWhenActive">
+                <li>How to use ePT</li>
+            </ul>
+            <ul class="showWhenActive">
+                <h4 class="text-center">Results</h4>
+                <hr>
+                <div class="row  result-card  justify-content-center">
+                <?php if (count($this->lastThreeShipments) > 0) {
+                    foreach ($this->lastThreeShipments as $shipment) {
+                        $link = "";
+                        if ($shipment['status'] == 'finalized') {
+                            $fileSafeShipmentCode = str_replace(array_merge(array_map('chr', range(0, 31)), array('<', '>', ':', '"', '/', '\\', '|', '?', '*')), '', $shipment["shipment_code"]);
+                            if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "reports" . DIRECTORY_SEPARATOR . $fileSafeShipmentCode . DIRECTORY_SEPARATOR . $fileSafeShipmentCode . "-summary.pdf")) {
+                                $link = $this->baseUrl("uploads/reports/" . $fileSafeShipmentCode . "/" . $fileSafeShipmentCode . "-summary.pdf"); ?>
+                                    <div class="col-md-6 my-2">
+                                        <div class="card" style="width: 100%;">
+                                            <div class="row">
+                                            <div class="col-md-2">
+                                                <img src="/images/document_icon.png" alt="" title=""/>
+                                            </div>
+                                            <div class="col-md-10 p-5">
+                                                <div>
+                                                    <span>XMPEP Summary Report</span>
+                                                    <br/>
+                                                    <span>[<a href="<?php echo $link; ?>"><?php echo $link; ?></a>]</span>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php
+                                break;
+                            }
+                        }
+                    }
+                } ?>
+                    <div class="col-md-6 my-2">
+                        <div class="card" style="width: 100%;">
+                            <div class="row">
+                            <div class="col-md-2">
+                                <img src="/images/document_icon.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <div>
+                                    <span>ePT Participant Result Entry & Report Download</span>
+                                    <br/>
+                                    <span>[<a href="<?php echo $this->baseUrl('docs/ePT_Participant_Result_Entry_and_Report.pdf'); ?>"><?php echo $this->baseUrl('docs/ePT_Participant_Result_Entry_and_Report.pdf'); ?></a>]</span>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-2">
+                        <div class="card" style="width: 100%;">
+                            <div class="row">
+                            <div class="col-md-2">
+                                <img src="/images/document_icon.png" alt="" title=""/>
+                            </div>
+                            <div class="col-md-10 p-5">
+                                <div>
+                                    <span>ePT PECC Site Management Result Entry & Reports</span>
+                                    <br/>
+                                    <span>[<a href="<?php echo $this->baseUrl('docs/ePT_PECC_Site_Management.pdf'); ?>"><?php echo $this->baseUrl('docs/ePT_PECC_Site_Management.pdf'); ?></a>]</span>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <div class="segmentContainer top left">
+            <div class="circleSegment">
+                <div>
+                    <img src="/images/assessment.png" alt="Assessment" title="Assessment"/>
+                    <h3>Assessment</h3>
                 </div>
             </div>
         </div>
-
+        <div class="segmentContainer top right">
+            <div class="circleSegment">
+                <div>
+                    <img src="/images/processes_programs.png" alt="Processes/Programs" title="Processes/Programs"/>
+                    <h3>Processes/&#8203;Programs</h3>
+                </div>
+            </div>
+        </div>
+        <div class="segmentContainer bottom left">
+            <div class="circleSegment">
+                <div>
+                    <h3>Progress/&#8203;Improvements</h3>
+                    <img src="/images/progress_improvements.png" alt="Progress/Improvements"
+                         title="Progress/Improvements"/>
+                </div>
+            </div>
+        </div>
+        <div class="segmentContainer bottom right">
+            <div class="circleSegment">
+                <div>
+                    <h3>Results</h3>
+                    <img src="/images/results.png" alt="Results" title="Results"/>
+                </div>
+            </div>
+        </div>
+        <div class="centerCycle">
+            <img src="/images/top_cycle.png"/>
+            <img src="/images/bottom_cycle.png"/>
+        </div>
     </div>
-
-
-    <div class="col-lg-4 omega">
-	<?php
-	if(isset($this->publications) && count($this->publications) >0){ ?>
-	    <h2>Publications</h2>
-	    <ul class="list">
-		<?php
-		foreach($this->publications as $publication) {
-		    $link="javascript:void(0)";
-		    $target="";
-		    if(isset($publication['file_name']) && trim($publication['file_name'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'document'. DIRECTORY_SEPARATOR . $publication['file_name'])){
-			$link = "/uploads/document/".$publication['file_name'];
-			$target ="target='_blank'";
-		    }
-		    ?>
-		  <li><a href="<?php echo $link; ?>" <?php echo $target; ?>><?php echo ucfirst($publication['content']); ?></a></li>
-		<?php } ?>
-	    </ul>
-	<?php } ?>
-
-	<?php
-	if(isset($this->partners) && count($this->partners) >0){ ?>
-	    <div class="indent">
-		<h2>Partners</h2>
-		<ul>
-		    <?php
-		    foreach($this->partners as $partner) {
-			$text = ucwords($partner['partner_name']);
-			if(isset($partner['link']) && trim($partner['link'])!= ''){
-			    $text = '<a href="'.$partner['link'].'" target="_blank">'.ucwords($partner['partner_name']).'</a>';
-			}
-		    ?>
-		      <li><?php echo $text; ?></li>
-		    <?php } ?>
-		</ul>
-	    </div>
-	<?php } ?>
+    <div id="popup" class="row p-2" style="display: none;" >  
+        <div id="result" class="col-md-12 py-2 px-5" >
+        </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            $('.segmentContainer').click(function () {
+                $("#popup").show();
+                var clickedSegment = this;
+                var popOutPanelSelector = '.' + $(clickedSegment).attr('class').replace('segmentContainer', 'popOutPanel').replace(/\s/g, '.');
+                var clickedSegmentActive = $(clickedSegment).hasClass('active');
+                var popout=$(popOutPanelSelector).children(".showWhenActive").html();
+                $("#result").html(popout);
 
+                $('.segmentContainer').removeClass('active');
+                $('.popOutPanel').removeClass('active');
+                if (!clickedSegmentActive) {
+                    var elmnt = document.getElementById("result");
+                    elmnt.scrollIntoView();
+                } else {
+                    $('.centerCycle').show();
+                    $('.segmentContainer').show();
+                    $('.popOutPanel').show();
+                }
+            })
+        })
 
+    </script>
+    <h2>Preparation</h2>
+    <img alt="Preparation Diagram" src="<?php echo $this->baseUrl("images/preparation_diagram.png"); ?>"
+         style="background-color: #fff;"/>
+    <?php if (count($this->publications) > 0) { ?>
+        <h2>Publications</h2>
+        <ul>
+            <?php
+            foreach ($this->publications as $publication) {
+                $link = "javascript:void(0)";
+                $target = "";
+                if (isset($publication['file_name']) && trim($publication['file_name']) != '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'document' . DIRECTORY_SEPARATOR . $publication['file_name'])) {
+                    $link = "/uploads/document/" . $publication['file_name'];
+                    $target = "target='_blank'";
+                }
+                ?>
+                <li>
+                    <a href="<?php echo $link; ?>" <?php echo $target; ?>><?php echo ucfirst($publication['content']); ?></a>
+                </li>
+            <?php } ?>
+        </ul>
+    <?php } ?>
+    <?php if (count($this->lastThreeShipments) > 0) { ?>
+        <h2>Recent PT</h2>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>Shipment Code</th>
+                <th>Date Shipped</th>
+                <th>Result Due Date</th>
+                <th>Results Summary</th>
+            </tr>
+            <?php
+            foreach ($this->lastThreeShipments as $shipment) {
+                $link = "";
+                if ($shipment['status'] == 'finalized') {
+                    $fileSafeShipmentCode = str_replace(array_merge(array_map('chr', range(0, 31)), array('<', '>', ':', '"', '/', '\\', '|', '?', '*')), '', $shipment["shipment_code"]);
+                    if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "reports" . DIRECTORY_SEPARATOR . $fileSafeShipmentCode . DIRECTORY_SEPARATOR . $fileSafeShipmentCode . "-summary.pdf")) {
+                        $link = $this->baseUrl("uploads/reports/" . $fileSafeShipmentCode . "/" . $fileSafeShipmentCode . "-summary.pdf");
+                    }
+                } ?>
+                <tr>
+                    <td><?php echo $shipment["shipment_code"] ?></td>
+                    <td><?php echo $this->dateFormat($shipment["shipment_date"]) ?></td>
+                    <td><?php echo $this->dateFormat($shipment["lastdate_response"]) ?></td>
+                    <td><?php echo $link != "" ? "<a href='" . $link . "' target='_blank'>Download</a>" : "" ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+    <?php } ?>
+    <h2>Participation in PT</h2>
+    <p>
+        "If you are a testing site that wishes to participate in XMPEP, please contact your in-country CDC office. The
+        Performance Evaluation Country Coordinator (PECC) in-country are responsible for communicating with the
+        Performance Evaluation program with CDC."
+    </p>
+    <h2>Download Forms</h2>
+    <ul>
+        <li>
+            <a href="<?php echo $this->baseUrl("templates/ept_tb_submission_form_1.1.pdf"); ?>" target="_blank">XTPT
+                Blank PT form</a>
+        </li>
+    </ul>
+    <h2>Contact Information</h2>
+    <table class="contactInformationContainer">
+        <tr>
+            <td colspan="2">
+                <p>Xpert TB Proficiency Test</p>
+                <a href="mailto:xtpt@cdc.gov">xtpt@cdc.gov</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="contactName">Kyle DeGruy</p>
+                <p>
+                    Program Coordinator, TB and Clinical Monitoring Team<br/>
+                    International Laboratory Branch<br/>
+                    Division of Global HIV and TB<br/>
+                    Center for Global Health<br/>
+                    US Centers for Disease Control and Prevention
+                </p>
+                <a href="mailto:gsz4@cdc.gov">gsz4@cdc.gov</a>
+            </td>
+            <td>
+                <p class="contactName">Patricia Hall</p>
+                <p>
+                    Team Lead, TB and Clinical Monitoring Team<br/>
+                    International Laboratory Branch<br/>
+                    Division of Global HIV and TB<br/>
+                    Center for Global Health<br/>
+                    US Centers for Disease Control and Prevention
+                </p>
+                <a href="mailto:igg5@cdc.gov">igg5@cdc.gov</a>
+            </td>
+        </tr>
+    </table>
 </div>

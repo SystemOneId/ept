@@ -27,9 +27,9 @@ $attributes = json_decode($this->evaluateData['shipment']['attributes'], true);
         <th>Algorithm Used</th>
         <td>
             <select name="algorithm" id="algorithm" class="isRequired form-control" title="Please choose the Algorithm used">
-                <option value="">--Select--</option>	
-                <option value="serial" <?php echo (isset($attributes['algorithm']) && $attributes['algorithm'] == 'serial') ? "selected='selected'" : ''; ?>>Serial</option>	
-                <option value="parallel" <?php echo (isset($attributes['algorithm']) && $attributes['algorithm'] == 'parallel') ? "selected='selected'" : ''; ?>>Parallel</option>	
+                <option value="">--Select--</option>
+                <option value="serial" <?php echo (isset($attributes['algorithm']) && $attributes['algorithm'] == 'serial') ? "selected='selected'" : ''; ?>>Serial</option>
+                <option value="parallel" <?php echo (isset($attributes['algorithm']) && $attributes['algorithm'] == 'parallel') ? "selected='selected'" : ''; ?>>Parallel</option>
             </select>
         </td>
     </tr>
@@ -37,7 +37,7 @@ $attributes = json_decode($this->evaluateData['shipment']['attributes'], true);
          <th>Supervisor Review</th>
         <td>
             <select name="supervisorApproval" id="supervisorApproval" class="isRequired form-control"  title="Please select if Supervisor Approval was conducted or not">
-                <option value=""> -- Select -- </option>
+                <option value="">--Select--</option>
                 <option value="yes" <?php if (strtolower($this->evaluateData['shipment']['supervisor_approval']) == 'yes') echo " selected "; ?>>YES</option>
                 <option value="no" <?php if (strtolower($this->evaluateData['shipment']['supervisor_approval']) == 'no') echo " selected "; ?>>NO</option>
             </select>
@@ -115,7 +115,7 @@ foreach ($this->evaluateData['possibleResults'] as $pr) {
         <td><input id="exp_date3" type="text" id="exp_date3" name="exp_date_3" value="<?php echo ((isset($this->evaluateData['results'][0]["exp_date_3"]) && $this->evaluateData['results'][0]["exp_date_3"] != "0000-00-00" && $this->evaluateData['results'][0]["exp_date_3"] != "") ? $this->dateFormat($this->evaluateData['results'][0]["exp_date_3"]) : ""); ?>" size="11" maxlength="11" class="datepicker form-control" readonly="readonly" /></td>
 
     </tr>
-    <thead> 
+    <thead>
         <tr align="CENTER" class="dark" >
             <th></th>
             <th style="text-align: center">Result-1</th>
@@ -153,23 +153,23 @@ foreach ($this->evaluateData['possibleResults'] as $pr) {
             <td  >
                 <select name="test_result_1[]" id="<?php echo "testresult1_" . $count; ?>"  class=" form-control">
                     <?php $this->dropdownSelection($possibleResults, $sample['test_result_1'], true); ?>
-                </select> 
+                </select>
             </td>
             <td >
                 <select name="test_result_2[]" id="<?php echo "testresult2_" . $count; ?>"    class=" form-control">
                     <?php $this->dropdownSelection($possibleResults, $sample['test_result_2'], true); ?>
-                </select> 
+                </select>
             </td>
             <td  >
                 <select name="test_result_3[]" id="<?php echo "testresult3_" . $count; ?>"    class=" form-control">
                     <?php $this->dropdownSelection($possibleResults, $sample['test_result_3'], true); ?>
-                </select> 
+                </select>
             </td>
 
             <td>
                 <select name="reported_result[]" id="<?php echo "testresultf_" . $count; ?>" <?php echo ($sample['mandatory'] == 1) ? "class='isRequired form-control'" : "class=' form-control'"; ?> title="Please enter the result" >
                     <?php $this->dropdownSelection($possibleFinalResults, $sample['reported_result'], true); ?>
-                </select> 
+                </select>
             </td>
 
             <td style="vertical-align: middle;">
@@ -179,14 +179,14 @@ foreach ($this->evaluateData['possibleResults'] as $pr) {
             </td>
             <td style="vertical-align: middle;">-</td>
         </tr>
-    <?php } ?>	
+    <?php } ?>
 
 
     <tr>
         <td colspan="7" style="text-align: center;">
             <strong>Samples</strong>
         </td>
-    </tr>	
+    </tr>
     <?php
     $total = 0;
     $count = 1;
@@ -205,23 +205,23 @@ foreach ($this->evaluateData['possibleResults'] as $pr) {
             <td  >
                 <select name="test_result_1[]" id="<?php echo "testresult1_" . $count; ?>"  class=" form-control">
                     <?php $this->dropdownSelection($possibleResults, $sample['test_result_1'], true); ?>
-                </select> 
+                </select>
             </td>
             <td >
                 <select name="test_result_2[]" id="<?php echo "testresult2_" . $count; ?>"    class=" form-control">
                     <?php $this->dropdownSelection($possibleResults, $sample['test_result_2'], true); ?>
-                </select> 
+                </select>
             </td>
             <td  >
                 <select name="test_result_3[]" id="<?php echo "testresult3_" . $count; ?>"    class=" form-control">
                     <?php $this->dropdownSelection($possibleResults, $sample['test_result_3'], true); ?>
-                </select> 
+                </select>
             </td>
 
             <td>
                 <select name="reported_result[]" id="<?php echo "testresultf_" . $count; ?>" <?php echo ($sample['mandatory'] == 1) ? "class='isRequired form-control'" : "class=' form-control'"; ?> title="Please enter the result" >
                     <?php $this->dropdownSelection($possibleFinalResults, $sample['reported_result'], true); ?>
-                </select> 
+                </select>
             </td>
 
             <td style="vertical-align: middle;">

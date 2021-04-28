@@ -436,9 +436,7 @@ foreach($this->allNotTestedReason as $reason) { ?>
                                     class="isRequired form-control input-sm"
                                     title="Please enter the Rif Resistance for this sample"
                                     placeholder="Please enter the Rif Resistance for this sample" <?php if (!$rifResistanceEnabled) { echo "readonly"; } ?>>
-                                <option value="">
-                                    -- Select --
-                                </option>
+                                <option value="">--Select--</option>
                                 <option value="detected" <?php echo ($sample['res_rif_resistance'] == 'detected' ? "selected='selected'" : ""); ?>>
                                     Detected
                                 </option>
@@ -1343,3 +1341,4 @@ foreach ($this->instruments as $id => $instrument_details) { ?>
     });
   }
 </script>
+

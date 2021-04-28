@@ -48,6 +48,7 @@ sudo a2dissite 000-default.conf
 sudo apache2ctl configtest
 sudo a2enmod rewrite
 sudo systemctl restart apache2
+```
 
 # Create the upload directories
 mkdir /var/www/ept-staging.systemone.id/public/uploads/document -p
