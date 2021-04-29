@@ -702,6 +702,9 @@ class Application_Service_Participants {
         );
         $data=[];
         foreach($participants as $key => $participant){
+            $reflexivecomment="";
+            $reflexivecomment=$this->get_reflexive_comment($participant['shipment_id']);
+            
             $attributes=json_decode($participant['attributes']);
             if(isset($attributes->count_errors_encountered_over_month)){
                 if($participant['is_pt_test_not_performed'] == "yes"){
@@ -709,7 +712,7 @@ class Application_Service_Participants {
                     if(isset($attributes->count_errors_encountered_over_month) && isset($attributes->count_tests_conducted_over_month) && intval($attributes->count_tests_conducted_over_month) > 0 ){
                         $error_rate=(intval($attributes->count_errors_encountered_over_month)/intval($attributes->count_tests_conducted_over_month))*100;
                     }
-                    if($error_rate > 5 || $participant['shipment_score'] != '100'){
+                    if($error_rate > 5 || $participant['shipment_score'] != '100' ||  $reflexivecomment != ""){
                         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
                         $results=$db->fetchAll($db->select()->from(array('res' => 'response_result_tb'),
                             array('instrument_serial'))
@@ -731,7 +734,7 @@ class Application_Service_Participants {
                             isset($attributes->count_errors_encountered_over_month)?$attributes->count_errors_encountered_over_month:"",
                             isset($attributes->count_tests_conducted_over_month)?$attributes->count_tests_conducted_over_month:"",
                             $error_rate,
-                            "",
+                            $reflexivecomment,
                             $instrument_used,
                             isset($attributes->expiry_date)?$attributes->expiry_date:"",
                             $participant['user_comment'],
@@ -745,7 +748,7 @@ class Application_Service_Participants {
                         $participant['iso_name'],
                         $participant['shipment_score'],
                         " ",
-                        " ",
+                        $reflexivecomment,
                         0,
                         $participant['pt_test_not_performed_comments'],
                         " ",
@@ -758,6 +761,63 @@ class Application_Service_Participants {
         $output['aaData']=$data;
         return  $output;
 	}
+
+    public function get_reflexive_comment($id) {
+
+        $evalService = new Application_Service_Evaluation();
+        $sLimit='';
+        $sOffset='';
+
+        $result = $evalService->getEvaluateReportsInPdf($id, $sLimit, $sOffset);
+        $allComments = array();
+        $tbResultValueMapping = array(
+            'detected' => 'Detected',
+            'high' => 'High',
+            'medium' => 'Medium',
+            'low' => 'Low',
+            'veryLow' => 'Very Low',
+            'trace' => 'Trace',
+            'notDetected' => 'Not Detected',
+            'detected' => 'Detected',
+            'noResult' => 'No Result',
+            'na' => 'N/A',
+            'indeterminate' => 'Indeterminate',
+            'invalid' => 'Invalid',
+            'error' => 'Error',
+            '' => ''
+        );
+        foreach ($result['responseResult'] as $response) {
+            $discrepantResultInSubmission = false;
+            $noResultOrError2127InSubmission = false;
+
+            if ($response["discrepant_result"] || !isset($response['mtb_detected']) || $response['mtb_detected'] == "") {
+                $discrepantResultInSubmission = true;
+            } 
+            if ($tbResultValueMapping[$response['mtb_detected']] == "No Result" || $response['error_code'] == "2127") {
+                $noResultOrError2127InSubmission = true;
+            }
+            // adding comments
+            if ($discrepantResultInSubmission) {
+                array_push($allComments, 'Red highlighted results represent discrepancies between actual and expected results.');
+            }
+            if (isset($result['cartridge_expired_on']) && $result['cartridge_expired_on'] != '') {
+                array_push($allComments, 'Xpert cartridge kit expired '.Pt_Commons_General::dbDateToString($result['cartridge_expired_on']).'. Use of expired reagents could lead to incorrect reporting of clinical results.'.$result['tests_done_on_expired_cartridges']);
+            }
+            if ($noResultOrError2127InSubmission) {
+                array_push($allComments, 'Check computer software GeneXpert Dx to ensure software is not freezing during testing. Check uninterrupted power supply (UPS) to ensure it is capable of sustaining power to GeneXpert for a minimum of 2 hours should an electrical power outage occur. If UPS is unable to sustain GeneXpert instrument for 2 hours request sufficient UPS that will provide power to GeneXpert instrument for no less than 2 hours to enable current run completion in the event of a power outage.');
+            }
+            if ($result['instrument_requires_calibration']) {
+                array_push($allComments, 'Calibration is an important maintenance procedure to ensure GeneXpert instruments are functioning properly and yielding accurate results. '.$result['tests_done_after_calibration_due'].'Instrument calibration should take place each year or after every 2,000 runs on each instrument module (whichever comes first). Entered data suggest your GeneXpert Instrument is due for calibration. Request an XpertCheck module calibration kit and perform calibration as instructed. Details on how to perform GeneXpert Instrument calibration can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.');
+            }
+            if (!isset($result['qc_done_on_time']) || !$result['qc_done_on_time']) {
+                array_push($allComments, 'Entered data suggest monthly maintenance needs to be performed.  Proper and timely monthly maintenance helps to ensure the longevity and accuracy of the GeneXpert Instrument. Details on how to perform GeneXpert Instrument monthly maintenance can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.');
+            }
+            if (!isset($result['supervisor_approval']) || $result['supervisor_approval'] == '' || $result['supervisor_approval'] == 'no') {
+                array_push($allComments, 'Entered data suggest submitted results were not cross checked by a supervisor or designee.  Supervisory report review is an important step in quality assurance of laboratory testing results and must be incorporated into the workflow of all laboratories to ensure accuracy of all reported results.');
+            }
+        }
+        return $allComments;
+    }
 
 }
 
