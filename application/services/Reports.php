@@ -3,6 +3,8 @@
 include_once "PHPExcel.php";
 
 class Application_Service_Reports {
+
+    public $result="";
     public function getAllShipments($parameters) {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -6515,7 +6517,109 @@ class Application_Service_Reports {
                 }
             }
         }
+        // Add paticipants require attention Sheet
+        $attentionRequiredParticipantSheet = new PHPExcel_Worksheet($excel, "");
+        $excel->addSheet($attentionRequiredParticipantSheet, $sheetIndex);
+        $sheetIndex++;
+        $sheetIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow(0, 1)->setValueExplicit(html_entity_decode("Participant That Require Attention from their PTcC ", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow(0, 1)->applyFromArray($sheetHeaderStyle);
+        $attentionRequiredParticipantSheet->getRowDimension(1)->setRowHeight(25);
+        $rowIndex = 3;
+        $columnIndex = 0;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Participant ID", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $columnIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Lab Name", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $columnIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Country", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $columnIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Shipment Score", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $columnIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Number Of Errors Reported", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $columnIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Number Of Tests Performed", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $columnIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Error Rate", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $columnIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Reflexive Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $columnIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Instruments Used", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $columnIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Cartidge Expiry Date", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $columnIndex++;
+        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Comment Entered While Submission", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $rowIndex++;
+        // get Data for sheet
+        $attentionRequiredParticipantsData=$this->getUAttentionRequiredParticipants($params['shipmentId']);
+        // $reflexive_comment= $this->getReflexiveComment($attentionRequiredParticipantData);
 
+        $columnIndex = 0;
+        foreach($attentionRequiredParticipantsData as $key => $attentionRequiredParticipantData){
+            $participant_id=$attentionRequiredParticipantData['participant_id'];
+            $participant_lab_name=$attentionRequiredParticipantData['lab_name'];
+            $country_name=$attentionRequiredParticipantData['iso_name'];
+            $score= $attentionRequiredParticipantData['shipment_score'];
+            $number_of_error_reported=0;
+            $total_number_of_test_performed=0;
+            $error_rate=0;
+            $reflexive_comment="";
+            $instrument_detail="";
+            $cartidge_expiry_date="";
+            $comment_entered_while_submission=$attentionRequiredParticipantData['user_comment'];
+            $past_two_month_not_submitted=false;
+            $attributes=json_decode($attentionRequiredParticipantData['attributes']);
+            if(isset($attributes->count_errors_encountered_over_month)){
+                if($attentionRequiredParticipantData['is_pt_test_not_performed'] == "yes"){
+                    if(isset($attributes->count_errors_encountered_over_month) && isset($attributes->count_tests_conducted_over_month) && intval($attributes->count_tests_conducted_over_month) > 0 ){
+                        $error_rate=(intval($attributes->count_errors_encountered_over_month)/intval($attributes->count_tests_conducted_over_month))*100;
+                    }
+                    if($error_rate > 5 || $attentionRequiredParticipantData['shipment_score'] != '100'){
+                        $instrument_detail= $this->getInstrumentDetails($attentionRequiredParticipantData);
+                        $number_of_error_reported=isset($attributes->count_errors_encountered_over_month)?$attributes->count_errors_encountered_over_month:"";
+                        $total_number_of_test_performed=isset($attributes->count_tests_conducted_over_month)?$attributes->count_tests_conducted_over_month:"";
+                        $cartidge_expiry_date=isset($attributes->expiry_date)?$attributes->expiry_date:"";
+                        $comment_entered_while_submission=$attentionRequiredParticipantData['user_comment'];
+                    }
+                }
+                if($attentionRequiredParticipantData['is_pt_test_not_performed'] == "no"){
+                    $comment_entered_while_submission=$attentionRequiredParticipantData['pt_test_not_performed_comments'];
+                }
+            }
+            if($error_rate > 5 && $score < 100 || $reflexive_comment != "" || $comment_entered_while_submission != ""  || $past_two_month_not_submitted == true){
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($participant_id, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($participant_lab_name, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($country_name, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($score, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($number_of_error_reported, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($total_number_of_test_performed, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($instrument_detail, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($cartidge_expiry_date, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($comment_entered_while_submission, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+            }
+        }
+        // End paticipants require attention Sheet
         $excel->setActiveSheetIndex(0);
         $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
         if (!file_exists(UPLOAD_PATH  . DIRECTORY_SEPARATOR . "generated-reports")) {
@@ -6532,4 +6636,131 @@ class Application_Service_Reports {
             "report-name" => $filename
         );
     }
+
+    public function getUAttentionRequiredParticipants($shipment_id) {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+
+        return  $db->fetchAll( $db->select()->from(array('spm' => 'shipment_participant_map'),
+            array('map_id','attributes','participant_id','shipment_id',
+                'user_comment','shipment_score','date_submitted',
+                'is_pt_test_not_performed',
+                'pt_test_not_performed_comments'))
+            ->join(array('p' => 'participant'), 'spm.participant_id = p.participant_id',
+            array('participant_id', 'lab_name'))
+            ->join(array('s' => 'shipment'), 's.shipment_id = spm.shipment_id',
+            array('status'))
+            ->join(array('ref' => 'reference_result_tb'), 'spm.shipment_id=ref.shipment_id',
+            array('sample_label', 'mandatory', 'sample_id'))
+            ->join(array('c' => 'countries'), 'c.id=p.country',
+            array('iso_name'))
+            ->where('spm.shipment_id != ?', $shipment_id)
+            // ->where('spm.date_submitted != ?', '')
+            // ->where('s.status = ?', 'evaluated')
+            // ->where("date_submitted >= ?",  $start_date)
+            // ->where("date_submitted <= ?",  $end_date)
+            ->group('p.participant_id'));
+    }
+    public function getInstrumentDetails($attentionRequiredParticipantData) {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $instrument_used="";
+        $results=$db->fetchAll($db->select()->from(array('res' => 'response_result_tb'),
+            array('instrument_serial'))
+            ->join(array('ins' => 'instrument'),'ins.instrument_serial = res.instrument_serial')
+            ->where('res.shipment_map_id = ?',$attentionRequiredParticipantData['map_id']) 
+            ->where('res.sample_id = ?',$attentionRequiredParticipantData['sample_id']) 
+            ->where('res.instrument_serial != ?',' ')
+            ->where('ins.participant_id = ?',$attentionRequiredParticipantData['participant_id']) 
+        );
+        foreach($results as $res){
+            $instrument_used=$res['instrument_serial'].",".$res['instrument_installed_on'].','.$res['instrument_last_calibrated_on'].'';
+        }
+        return  $instrument_used;
+    }
+    public function getReflexiveComment($attentionRequiredParticipantData) {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $reflexive_comment="";
+        $evalService = new Application_Service_Evaluation();
+        $this->result = $evalService->getEvaluateReports($attentionRequiredParticipantData['shipment_id']);
+        if (sizeof($this->result['shipment']) > 0) {
+            $tbResultValueMapping = array(
+                'detected' => 'Detected',
+                'high' => 'High',
+                'medium' => 'Medium',
+                'low' => 'Low',
+                'veryLow' => 'Very Low',
+                'trace' => 'Trace',
+                'notDetected' => 'Not Detected',
+                'detected' => 'Detected',
+                'noResult' => 'No Result',
+                'na' => 'N/A',
+                'indeterminate' => 'Indeterminate',
+                'invalid' => 'Invalid',
+                'error' => 'Error',
+                '' => ''
+            );
+            foreach ($this->result['shipment'] as $result) {
+                if (isset($result['responseResult']) && sizeof($result['responseResult']) > 0) {
+
+                    $discrepantResultInSubmission = false;
+                    $noResultOrError2127InSubmission = false;
+                    foreach ($result['responseResult'] as $response) {
+                        if ($response["discrepant_result"]) {
+                            $discrepantResultInSubmission = true;
+                        }
+                        if ($tbResultValueMapping[$response['mtb_detected']] == "No Result" || $response['error_code'] == "2127") {
+                            $noResultOrError2127InSubmission = true;
+                        }
+                    }
+                    if ((isset($result['eval_comment']) && $result['eval_comment'] != '') ||
+                        (isset($result['optional_eval_comment']) && $result['optional_eval_comment'] != '') ||
+                        $discrepantResultInSubmission || isset($result['cartridge_expired_on']) ||
+                        $noResultOrError2127InSubmission ||
+                        (isset($result['instrument_requires_calibration']) && $result['instrument_requires_calibration']) ||
+                        !isset($result['supervisor_approval']) || $result['supervisor_approval'] == '' || $result['supervisor_approval'] == 'no' ||
+                        !isset($result['qc_done_on_time']) || !$result['qc_done_on_time'] ||
+                        (isset($result['ptNotTestedComment']) && $result['ptNotTestedComment'] != '')) {
+                            
+                            $allComments = array();
+                            if (isset($result['eval_comment']) && $result['eval_comment'] !== '') {
+                                array_push($allComments, $result['eval_comment']);
+                            }
+                            if (isset($result['optional_eval_comment']) && $result['optional_eval_comment'] !== '') {
+                                array_push($allComments, $result['optional_eval_comment']);
+                            }
+                            if (isset($result['ptNotTestedComment']) && $result['ptNotTestedComment'] != '') {
+                                array_push($allComments, $result['ptNotTestedComment']);
+                            } else {
+                                if ($discrepantResultInSubmission) {
+                                    array_push($allComments, 'Red highlighted results represent discrepancies between actual and expected results.');
+                                }
+                                if ($result['cartridge_expired_on']) {
+                                    array_push($allComments, 'Xpert cartridge kit expired '.Pt_Commons_General::dbDateToString($result['cartridge_expired_on']).'. Use of expired reagents could lead to incorrect reporting of clinical results.'.$result['tests_done_on_expired_cartridges']);
+                                }
+                                if ($noResultOrError2127InSubmission) {
+                                    array_push($allComments, 'Check computer software GeneXpert Dx to ensure software is not freezing during testing. Check uninterrupted power supply (UPS) to ensure it is capable of sustaining power to GeneXpert for a minimum of 2 hours should an electrical power outage occur. If UPS is unable to sustain GeneXpert instrument for 2 hours request sufficient UPS that will provide power to GeneXpert instrument for no less than 2 hours to enable current run completion in the event of a power outage.');
+                                }
+                                if ($result['instrument_requires_calibration']) {
+                                    array_push($allComments, 'Calibration is an important maintenance procedure to ensure GeneXpert instruments are functioning properly and yielding accurate results. '.$result['tests_done_after_calibration_due'].'Instrument calibration should take place each year or after every 2,000 runs on each instrument module (whichever comes first). Entered data suggest your GeneXpert Instrument is due for calibration. Request an XpertCheck module calibration kit and perform calibration as instructed. Details on how to perform GeneXpert Instrument calibration can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.');
+                                }
+                                if (!isset($result['qc_done_on_time']) || !$result['qc_done_on_time']) {
+                                    array_push($allComments, 'Entered data suggest monthly maintenance needs to be performed.  Proper and timely monthly maintenance helps to ensure the longevity and accuracy of the GeneXpert Instrument. Details on how to perform GeneXpert Instrument monthly maintenance can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.');
+                                }
+                                if (!isset($result['supervisor_approval']) || $result['supervisor_approval'] == '' || $result['supervisor_approval'] == 'no') {
+                                    array_push($allComments, 'Entered data suggest submitted results were not cross checked by a supervisor or designee.  Supervisory report review is an important step in quality assurance of laboratory testing results and must be incorporated into the workflow of all laboratories to ensure accuracy of all reported results.');
+                                }
+                            }
+                        }
+                }
+            }
+        }
+        if(count($allComments) >0){
+            $reflexive_comment="<ul>";
+            foreach($allComments as $comment){
+                $reflexive_comment="<li> ".$comment."</li>";
+            }
+            $reflexive_comment="</ul>";
+        }
+        return  $reflexive_comment;
+    }
+
 }
