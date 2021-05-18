@@ -6518,7 +6518,7 @@ class Application_Service_Reports {
             }
         }
         // Add paticipants require attention Sheet
-        $attentionRequiredParticipantSheet = new PHPExcel_Worksheet($excel, "");
+        $attentionRequiredParticipantSheet = new PHPExcel_Worksheet($excel, "Attention Required");
         $excel->addSheet($attentionRequiredParticipantSheet, $sheetIndex);
         $sheetIndex++;
         $sheetIndex++;
@@ -6562,10 +6562,11 @@ class Application_Service_Reports {
         $rowIndex++;
         // get Data for sheet
         $attentionRequiredParticipantsData=$this->getUAttentionRequiredParticipants($params['shipmentId']);
-        // $reflexive_comment= $this->getReflexiveComment($attentionRequiredParticipantData);
+        $reflexive_comments= $this->getReflexiveComment($params['shipmentId']);
 
-        $columnIndex = 0;
-        foreach($attentionRequiredParticipantsData as $key => $attentionRequiredParticipantData){
+
+        foreach($attentionRequiredParticipantsData as  $attentionRequiredParticipantData){
+            $columnIndex = 0;
             $participant_id=$attentionRequiredParticipantData['participant_id'];
             $participant_lab_name=$attentionRequiredParticipantData['lab_name'];
             $country_name=$attentionRequiredParticipantData['iso_name'];
@@ -6576,25 +6577,30 @@ class Application_Service_Reports {
             $reflexive_comment="";
             $instrument_detail="";
             $cartidge_expiry_date="";
+            // to do filter array function
+            foreach($reflexive_comments as $ref){
+                if($ref['participant'] == $attentionRequiredParticipantData['participant_id']){
+                    $reflexive_comment= $ref['reflexive_comments'];
+                    // break;
+                }
+            }
             $comment_entered_while_submission=$attentionRequiredParticipantData['user_comment'];
             $past_two_month_not_submitted=false;
             $attributes=json_decode($attentionRequiredParticipantData['attributes']);
-            if(isset($attributes->count_errors_encountered_over_month)){
-                if($attentionRequiredParticipantData['is_pt_test_not_performed'] == "yes"){
-                    if(isset($attributes->count_errors_encountered_over_month) && isset($attributes->count_tests_conducted_over_month) && intval($attributes->count_tests_conducted_over_month) > 0 ){
-                        $error_rate=(intval($attributes->count_errors_encountered_over_month)/intval($attributes->count_tests_conducted_over_month))*100;
-                    }
-                    if($error_rate > 5 || $attentionRequiredParticipantData['shipment_score'] != '100'){
-                        $instrument_detail= $this->getInstrumentDetails($attentionRequiredParticipantData);
-                        $number_of_error_reported=isset($attributes->count_errors_encountered_over_month)?$attributes->count_errors_encountered_over_month:"";
-                        $total_number_of_test_performed=isset($attributes->count_tests_conducted_over_month)?$attributes->count_tests_conducted_over_month:"";
-                        $cartidge_expiry_date=isset($attributes->expiry_date)?$attributes->expiry_date:"";
-                        $comment_entered_while_submission=$attentionRequiredParticipantData['user_comment'];
-                    }
+            if(isset($attributes->count_errors_encountered_over_month) && $attentionRequiredParticipantData['is_pt_test_not_performed'] == "yes"){
+                if(isset($attributes->count_errors_encountered_over_month) && isset($attributes->count_tests_conducted_over_month) && intval($attributes->count_tests_conducted_over_month) > 0 ){
+                    $error_rate=(intval($attributes->count_errors_encountered_over_month)/intval($attributes->count_tests_conducted_over_month))*100;
                 }
-                if($attentionRequiredParticipantData['is_pt_test_not_performed'] == "no"){
-                    $comment_entered_while_submission=$attentionRequiredParticipantData['pt_test_not_performed_comments'];
+                if($error_rate > 5 || $attentionRequiredParticipantData['shipment_score'] != '100'){
+                    $instrument_detail= $this->getInstrumentDetails($attentionRequiredParticipantData);
+                    $number_of_error_reported=isset($attributes->count_errors_encountered_over_month)?$attributes->count_errors_encountered_over_month:"";
+                    $total_number_of_test_performed=isset($attributes->count_tests_conducted_over_month)?$attributes->count_tests_conducted_over_month:"";
+                    $cartidge_expiry_date=isset($attributes->expiry_date)?$attributes->expiry_date:"";
+                    $comment_entered_while_submission=$attentionRequiredParticipantData['user_comment'];
                 }
+            }
+            if(isset($attributes->count_errors_encountered_over_month) && $attentionRequiredParticipantData['is_pt_test_not_performed'] == "no"){
+                $comment_entered_while_submission=$attentionRequiredParticipantData['pt_test_not_performed_comments'];
             }
             if($error_rate > 5 && $score < 100 || $reflexive_comment != "" || $comment_entered_while_submission != ""  || $past_two_month_not_submitted == true){
                 $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($participant_id, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
@@ -6609,6 +6615,8 @@ class Application_Service_Reports {
                 $columnIndex++;
                 $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($total_number_of_test_performed, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
                 $columnIndex++;
+                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($error_rate, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
                 $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
                 $columnIndex++;
                 $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($instrument_detail, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
@@ -6618,6 +6626,7 @@ class Application_Service_Reports {
                 $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($comment_entered_while_submission, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
                 $columnIndex++;
             }
+            $rowIndex+=1;
         }
         // End paticipants require attention Sheet
         $excel->setActiveSheetIndex(0);
@@ -6663,6 +6672,7 @@ class Application_Service_Reports {
     public function getInstrumentDetails($attentionRequiredParticipantData) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $instrument_used="";
+        // CONCATINATION QYERY
         $results=$db->fetchAll($db->select()->from(array('res' => 'response_result_tb'),
             array('instrument_serial'))
             ->join(array('ins' => 'instrument'),'ins.instrument_serial = res.instrument_serial')
@@ -6672,15 +6682,15 @@ class Application_Service_Reports {
             ->where('ins.participant_id = ?',$attentionRequiredParticipantData['participant_id']) 
         );
         foreach($results as $res){
-            $instrument_used=$res['instrument_serial'].",".$res['instrument_installed_on'].','.$res['instrument_last_calibrated_on'].'';
+            $instrument_used=$instrument_used.$res['instrument_serial'].",".$res['instrument_installed_on'].','.$res['instrument_last_calibrated_on'].'';
         }
         return  $instrument_used;
     }
-    public function getReflexiveComment($attentionRequiredParticipantData) {
+    public function getReflexiveComment($shipment_id) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $reflexive_comment="";
+        $reflexive_comment=[];
         $evalService = new Application_Service_Evaluation();
-        $this->result = $evalService->getEvaluateReports($attentionRequiredParticipantData['shipment_id']);
+        $this->result = $evalService->getEvaluateReports($shipment_id);
         if (sizeof($this->result['shipment']) > 0) {
             $tbResultValueMapping = array(
                 'detected' => 'Detected',
@@ -6699,8 +6709,8 @@ class Application_Service_Reports {
                 '' => ''
             );
             foreach ($this->result['shipment'] as $result) {
+                $allComments='';
                 if (isset($result['responseResult']) && sizeof($result['responseResult']) > 0) {
-
                     $discrepantResultInSubmission = false;
                     $noResultOrError2127InSubmission = false;
                     foreach ($result['responseResult'] as $response) {
@@ -6720,45 +6730,38 @@ class Application_Service_Reports {
                         !isset($result['qc_done_on_time']) || !$result['qc_done_on_time'] ||
                         (isset($result['ptNotTestedComment']) && $result['ptNotTestedComment'] != '')) {
                             
-                            $allComments = array();
                             if (isset($result['eval_comment']) && $result['eval_comment'] !== '') {
-                                array_push($allComments, $result['eval_comment']);
+                                $allComments=$allComments . $result['eval_comment'];
                             }
                             if (isset($result['optional_eval_comment']) && $result['optional_eval_comment'] !== '') {
-                                array_push($allComments, $result['optional_eval_comment']);
+                                $allComments=$allComments . $result['optional_eval_comment'];
                             }
                             if (isset($result['ptNotTestedComment']) && $result['ptNotTestedComment'] != '') {
-                                array_push($allComments, $result['ptNotTestedComment']);
+                                $allComments=$allComments . $result['ptNotTestedComment'];
                             } else {
                                 if ($discrepantResultInSubmission) {
-                                    array_push($allComments, 'Red highlighted results represent discrepancies between actual and expected results.');
+                                    $allComments=$allComments . 'Red highlighted results represent discrepancies between actual and expected results.';
                                 }
                                 if ($result['cartridge_expired_on']) {
-                                    array_push($allComments, 'Xpert cartridge kit expired '.Pt_Commons_General::dbDateToString($result['cartridge_expired_on']).'. Use of expired reagents could lead to incorrect reporting of clinical results.'.$result['tests_done_on_expired_cartridges']);
+                                    $allComments=$allComments . 'Xpert cartridge kit expired '.Pt_Commons_General::dbDateToString($result['cartridge_expired_on']).'. Use of expired reagents could lead to incorrect reporting of clinical results.'.$result['tests_done_on_expired_cartridges'];
                                 }
                                 if ($noResultOrError2127InSubmission) {
-                                    array_push($allComments, 'Check computer software GeneXpert Dx to ensure software is not freezing during testing. Check uninterrupted power supply (UPS) to ensure it is capable of sustaining power to GeneXpert for a minimum of 2 hours should an electrical power outage occur. If UPS is unable to sustain GeneXpert instrument for 2 hours request sufficient UPS that will provide power to GeneXpert instrument for no less than 2 hours to enable current run completion in the event of a power outage.');
+                                    $allComments=$allComments . 'Check computer software GeneXpert Dx to ensure software is not freezing during testing. Check uninterrupted power supply (UPS) to ensure it is capable of sustaining power to GeneXpert for a minimum of 2 hours should an electrical power outage occur. If UPS is unable to sustain GeneXpert instrument for 2 hours request sufficient UPS that will provide power to GeneXpert instrument for no less than 2 hours to enable current run completion in the event of a power outage.';
                                 }
                                 if ($result['instrument_requires_calibration']) {
-                                    array_push($allComments, 'Calibration is an important maintenance procedure to ensure GeneXpert instruments are functioning properly and yielding accurate results. '.$result['tests_done_after_calibration_due'].'Instrument calibration should take place each year or after every 2,000 runs on each instrument module (whichever comes first). Entered data suggest your GeneXpert Instrument is due for calibration. Request an XpertCheck module calibration kit and perform calibration as instructed. Details on how to perform GeneXpert Instrument calibration can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.');
+                                    $allComments=$allComments . 'Calibration is an important maintenance procedure to ensure GeneXpert instruments are functioning properly and yielding accurate results. '.$result['tests_done_after_calibration_due'].'Instrument calibration should take place each year or after every 2,000 runs on each instrument module (whichever comes first). Entered data suggest your GeneXpert Instrument is due for calibration. Request an XpertCheck module calibration kit and perform calibration as instructed. Details on how to perform GeneXpert Instrument calibration can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.';
                                 }
                                 if (!isset($result['qc_done_on_time']) || !$result['qc_done_on_time']) {
-                                    array_push($allComments, 'Entered data suggest monthly maintenance needs to be performed.  Proper and timely monthly maintenance helps to ensure the longevity and accuracy of the GeneXpert Instrument. Details on how to perform GeneXpert Instrument monthly maintenance can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.');
+                                    $allComments=$allComments . 'Entered data suggest monthly maintenance needs to be performed.  Proper and timely monthly maintenance helps to ensure the longevity and accuracy of the GeneXpert Instrument. Details on how to perform GeneXpert Instrument monthly maintenance can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.';
                                 }
                                 if (!isset($result['supervisor_approval']) || $result['supervisor_approval'] == '' || $result['supervisor_approval'] == 'no') {
-                                    array_push($allComments, 'Entered data suggest submitted results were not cross checked by a supervisor or designee.  Supervisory report review is an important step in quality assurance of laboratory testing results and must be incorporated into the workflow of all laboratories to ensure accuracy of all reported results.');
+                                    $allComments=$allComments . 'Entered data suggest submitted results were not cross checked by a supervisor or designee.  Supervisory report review is an important step in quality assurance of laboratory testing results and must be incorporated into the workflow of all laboratories to ensure accuracy of all reported results.';
                                 }
                             }
                         }
-                }
+                }   
+                $reflexive_comment[]=['participant'=>$result['participant_id'],'reflexive_comments'=>$allComments];
             }
-        }
-        if(count($allComments) >0){
-            $reflexive_comment="<ul>";
-            foreach($allComments as $comment){
-                $reflexive_comment="<li> ".$comment."</li>";
-            }
-            $reflexive_comment="</ul>";
         }
         return  $reflexive_comment;
     }
