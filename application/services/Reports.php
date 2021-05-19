@@ -6517,51 +6517,59 @@ class Application_Service_Reports {
                 }
             }
         }
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            )
+        );
         // Add paticipants require attention Sheet
-        $attentionRequiredParticipantSheet = new PHPExcel_Worksheet($excel, "Attention Required");
-        $excel->addSheet($attentionRequiredParticipantSheet, $sheetIndex);
+        
+        $ParticipantsRequiringAttention = new PHPExcel_Worksheet($excel, "Requiring Attention");
+        $excel->addSheet($ParticipantsRequiringAttention, $sheetIndex);
         $sheetIndex++;
         $sheetIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow(0, 1)->setValueExplicit(html_entity_decode("Participant That Require Attention from their PTcC ", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow(0, 1)->applyFromArray($sheetHeaderStyle);
-        $attentionRequiredParticipantSheet->getRowDimension(1)->setRowHeight(25);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow(0, 1)->setValueExplicit(html_entity_decode("Participant That Require Attention from their PTcC ", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow(0, 1)->applyFromArray($sheetHeaderStyle);
+        $ParticipantsRequiringAttention->getRowDimension(1)->setRowHeight(25);
+        $ParticipantsRequiringAttention->mergeCells('A1:K1');
+        $ParticipantsRequiringAttention->getStyle("A1")->applyFromArray($style);
         $rowIndex = 3;
         $columnIndex = 0;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Participant ID", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Participant ID", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Lab Name", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Lab Name", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Country", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Country", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Shipment Score", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Shipment Score", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Number Of Errors Reported", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Number Of Errors Reported", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Number Of Tests Performed", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Number Of Tests Performed", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Error Rate", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Error Rate", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Reflexive Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Reflexive Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Instruments Used", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Instruments Used", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Cartidge Expiry Date", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Cartidge Expiry Date", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-        $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Comment Entered While Submission", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-        $attentionRequiredParticipantSheet->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Comment Entered While Submission", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $rowIndex++;
         // get Data for sheet
-        $attentionRequiredParticipantsData=$this->getUAttentionRequiredParticipants($params['shipmentId']);
+        $attentionRequiredParticipantsData=$this->getParticipantsRequiringAttention($params['shipmentId']);
         $reflexive_comments= $this->getReflexiveComment($params['shipmentId']);
 
 
@@ -6577,56 +6585,51 @@ class Application_Service_Reports {
             $reflexive_comment="";
             $instrument_detail="";
             $cartidge_expiry_date="";
-            // to do filter array function
             foreach($reflexive_comments as $ref){
                 if($ref['participant'] == $attentionRequiredParticipantData['participant_id']){
                     $reflexive_comment= $ref['reflexive_comments'];
-                    // break;
+                    break;
                 }
             }
+            $instrument_detail= $this->getInstrumentDetails($attentionRequiredParticipantData);
             $comment_entered_while_submission=$attentionRequiredParticipantData['user_comment'];
             $past_two_month_not_submitted=false;
             $attributes=json_decode($attentionRequiredParticipantData['attributes']);
-            if(isset($attributes->count_errors_encountered_over_month) && $attentionRequiredParticipantData['is_pt_test_not_performed'] == "yes"){
-                if(isset($attributes->count_errors_encountered_over_month) && isset($attributes->count_tests_conducted_over_month) && intval($attributes->count_tests_conducted_over_month) > 0 ){
-                    $error_rate=(intval($attributes->count_errors_encountered_over_month)/intval($attributes->count_tests_conducted_over_month))*100;
-                }
-                if($error_rate > 5 || $attentionRequiredParticipantData['shipment_score'] != '100'){
-                    $instrument_detail= $this->getInstrumentDetails($attentionRequiredParticipantData);
-                    $number_of_error_reported=isset($attributes->count_errors_encountered_over_month)?$attributes->count_errors_encountered_over_month:"";
-                    $total_number_of_test_performed=isset($attributes->count_tests_conducted_over_month)?$attributes->count_tests_conducted_over_month:"";
-                    $cartidge_expiry_date=isset($attributes->expiry_date)?$attributes->expiry_date:"";
-                    $comment_entered_while_submission=$attentionRequiredParticipantData['user_comment'];
-                }
+            $cartidge_expiry_date=isset($attributes->expiry_date)?$attributes->expiry_date:"";
+            
+            if(isset($attributes->count_errors_encountered_over_month) && isset($attributes->count_tests_conducted_over_month) && intval($attributes->count_tests_conducted_over_month) > 0 ){
+                $error_rate=(intval($attributes->count_errors_encountered_over_month)/intval($attributes->count_tests_conducted_over_month))*100;
             }
-            if(isset($attributes->count_errors_encountered_over_month) && $attentionRequiredParticipantData['is_pt_test_not_performed'] == "no"){
-                $comment_entered_while_submission=$attentionRequiredParticipantData['pt_test_not_performed_comments'];
+                $number_of_error_reported=isset($attributes->count_errors_encountered_over_month)?$attributes->count_errors_encountered_over_month:"";
+                $total_number_of_test_performed=isset($attributes->count_tests_conducted_over_month)?$attributes->count_tests_conducted_over_month:"";
+                $comment_entered_while_submission=$attentionRequiredParticipantData['user_comment'];
+            $comment_entered_while_submission=$attentionRequiredParticipantData['pt_test_not_performed_comments'];
+            if($error_rate > 5 || $score < 100 || $reflexive_comment != "" || $comment_entered_while_submission != ""  || $past_two_month_not_submitted == true){
+
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($participant_id, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($participant_lab_name, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($country_name, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($score, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($number_of_error_reported, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($total_number_of_test_performed, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($error_rate, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($instrument_detail, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($cartidge_expiry_date, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($comment_entered_while_submission, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+                $columnIndex++;
+                $rowIndex+=1;
             }
-            if($error_rate > 5 && $score < 100 || $reflexive_comment != "" || $comment_entered_while_submission != ""  || $past_two_month_not_submitted == true){
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($participant_id, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($participant_lab_name, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($country_name, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($score, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($number_of_error_reported, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($total_number_of_test_performed, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($error_rate, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($instrument_detail, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($cartidge_expiry_date, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-                $attentionRequiredParticipantSheet->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($comment_entered_while_submission, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                $columnIndex++;
-            }
-            $rowIndex+=1;
         }
         // End paticipants require attention Sheet
         $excel->setActiveSheetIndex(0);
@@ -6646,7 +6649,7 @@ class Application_Service_Reports {
         );
     }
 
-    public function getUAttentionRequiredParticipants($shipment_id) {
+    public function getParticipantsRequiringAttention($shipment_id) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
 
         return  $db->fetchAll( $db->select()->from(array('spm' => 'shipment_participant_map'),
@@ -6663,16 +6666,11 @@ class Application_Service_Reports {
             ->join(array('c' => 'countries'), 'c.id=p.country',
             array('iso_name'))
             ->where('spm.shipment_id != ?', $shipment_id)
-            // ->where('spm.date_submitted != ?', '')
-            // ->where('s.status = ?', 'evaluated')
-            // ->where("date_submitted >= ?",  $start_date)
-            // ->where("date_submitted <= ?",  $end_date)
             ->group('p.participant_id'));
     }
     public function getInstrumentDetails($attentionRequiredParticipantData) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $instrument_used="";
-        // CONCATINATION QYERY
         $results=$db->fetchAll($db->select()->from(array('res' => 'response_result_tb'),
             array('instrument_serial'))
             ->join(array('ins' => 'instrument'),'ins.instrument_serial = res.instrument_serial')
@@ -6682,7 +6680,7 @@ class Application_Service_Reports {
             ->where('ins.participant_id = ?',$attentionRequiredParticipantData['participant_id']) 
         );
         foreach($results as $res){
-            $instrument_used=$instrument_used.$res['instrument_serial'].",".$res['instrument_installed_on'].','.$res['instrument_last_calibrated_on'].'';
+            $instrument_used=$instrument_used . $res['instrument_serial'].",".$res['instrument_installed_on'].','.$res['instrument_last_calibrated_on'].'';
         }
         return  $instrument_used;
     }
