@@ -341,42 +341,42 @@ if (sizeof($this->result['shipment']) > 0) {
             $commentsSection .= '    <tr style="background-color:#777777;color:#ffffff;">';
             $commentsSection .= '	     <td style="text-align:center;border-top:solid 10px #000000;border-bottom:solid 10px #000000;"><strong>Comments</strong></td>';
             $commentsSection .= '    </tr>';
-            if ((isset($result['eval_comment']) && $result['eval_comment'] != '') ||
-                (isset($result['optional_eval_comment']) && $result['optional_eval_comment'] != '') ||
-                $discrepantResultInSubmission || isset($result['cartridge_expired_on']) ||
-                $noResultOrError2127InSubmission ||
-                (isset($result['instrument_requires_calibration']) && $result['instrument_requires_calibration']) ||
-                !isset($result['supervisor_approval']) || $result['supervisor_approval'] == '' || $result['supervisor_approval'] == 'no' ||
-                !isset($result['qc_done_on_time']) || !$result['qc_done_on_time'] ||
-                (isset($result['ptNotTestedComment']) && $result['ptNotTestedComment'] != '')) {
+
+            foreach($reflexive_comments as $ref){
+                if($ref['participant'] == $result['participant_id'] ){
+                    $reflexive_comment= $ref['comments'];
+                    break;
+                }
+            }
+            if (count($reflexive_comment['eval_comment']) > 0 ) {
                 $allComments = array();
-                if (isset($result['eval_comment']) && $result['eval_comment'] !== '') {
-                    array_push($allComments, $result['eval_comment']);
+                if (isset($reflexive_comment['eval_comment']) && $reflexive_comment['eval_comment'] != '') {
+                    array_push($allComments, $reflexive_comment['eval_comment']);
                 }
-                if (isset($result['optional_eval_comment']) && $result['optional_eval_comment'] !== '') {
-                    array_push($allComments, $result['optional_eval_comment']);
+                if (isset($reflexive_comment['optional_eval_comment']) && $reflexive_comment['optional_eval_comment'] != '') {
+                    array_push($allComments, $reflexive_comment['optional_eval_comment']);
                 }
-                if (isset($result['ptNotTestedComment']) && $result['ptNotTestedComment'] != '') {
-                    array_push($allComments, $result['ptNotTestedComment']);
-                } else {
-                    if ($discrepantResultInSubmission) {
-                        array_push($allComments, 'Red highlighted results represent discrepancies between actual and expected results.');
-                    }
-                    if (isset($result['cartridge_expired_on']) && $result['cartridge_expired_on'] != '') {
-                        array_push($allComments, 'Xpert cartridge kit expired '.Pt_Commons_General::dbDateToString($result['cartridge_expired_on']).'. Use of expired reagents could lead to incorrect reporting of clinical results.'.$result['tests_done_on_expired_cartridges']);
-                    }
-                    if ($noResultOrError2127InSubmission) {
-                        array_push($allComments, 'Check computer software GeneXpert Dx to ensure software is not freezing during testing. Check uninterrupted power supply (UPS) to ensure it is capable of sustaining power to GeneXpert for a minimum of 2 hours should an electrical power outage occur. If UPS is unable to sustain GeneXpert instrument for 2 hours request sufficient UPS that will provide power to GeneXpert instrument for no less than 2 hours to enable current run completion in the event of a power outage.');
-                    }
-                    if ($result['instrument_requires_calibration']) {
-                        array_push($allComments, 'Calibration is an important maintenance procedure to ensure GeneXpert instruments are functioning properly and yielding accurate results. '.$result['tests_done_after_calibration_due'].'Instrument calibration should take place each year or after every 2,000 runs on each instrument module (whichever comes first). Entered data suggest your GeneXpert Instrument is due for calibration. Request an XpertCheck module calibration kit and perform calibration as instructed. Details on how to perform GeneXpert Instrument calibration can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.');
-                    }
-                    if (!isset($result['qc_done_on_time']) || !$result['qc_done_on_time']) {
-                        array_push($allComments, 'Entered data suggest monthly maintenance needs to be performed.  Proper and timely monthly maintenance helps to ensure the longevity and accuracy of the GeneXpert Instrument. Details on how to perform GeneXpert Instrument monthly maintenance can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.');
-                    }
-                    if (!isset($result['supervisor_approval']) || $result['supervisor_approval'] == '' || $result['supervisor_approval'] == 'no') {
-                        array_push($allComments, 'Entered data suggest submitted results were not cross checked by a supervisor or designee.  Supervisory report review is an important step in quality assurance of laboratory testing results and must be incorporated into the workflow of all laboratories to ensure accuracy of all reported results.');
-                    }
+                if (isset($reflexive_comment['ptNotTestedComment']) && $reflexive_comment['ptNotTestedComment'] != '') {
+                    array_push($allComments, $reflexive_comment['ptNotTestedComment']);
+                }
+                if (isset($reflexive_comment['discrepancies_comment']) || $reflexive_comment['discrepancies_comment']) {
+                    array_push($allComments, $reflexive_comment['discrepancies_comment']);
+                }
+                if (isset($reflexive_comment['kit_expired_comment']) && $reflexive_comment['kit_expired_comment'] != '') {
+                    array_push($allComments, $reflexive_comment['kit_expired_comment']);
+                }
+                if (isset($reflexive_comment['Check_computer']) || $reflexive_comment['Check_computer']) {
+                    array_push($allComments, $reflexive_comment['Check_computer']);
+
+                }
+                if (isset($reflexive_comment['instrument_requires_calibration']) || $reflexive_comment['instrument_requires_calibration']) {
+                    array_push($allComments, $reflexive_comment['instrument_requires_calibration']);
+                }
+                if (isset($reflexive_comment['qc_done_on_time']) || $reflexive_comment['qc_done_on_time']) {
+                    array_push($allComments, $reflexive_comment['qc_done_on_time']);
+                }
+                if (isset($reflexive_comment['supervisor_approval']) || $reflexive_comment['supervisor_approval'] ) {
+                    array_push($allComments, $reflexive_comment['supervisor_approval']);
                 }
                 if (count($allComments) > 0) {
                     $commentsSection .= '    <tr>';

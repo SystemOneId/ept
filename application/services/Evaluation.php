@@ -2817,7 +2817,11 @@ class Application_Service_Evaluation {
             $db->update('shipment', array('status' => 'evaluated'), "shipment_id=" . $shipmentId);
         }
 
+        
+        $reportService = new Application_Service_Reports();
+        $reflexive_comments = $reportService->getReflexiveComment($shipmentId);
         $result = array(
+            'reflexive_comments' => $reflexive_comments,
             'shipment' => $shipmentResult,
             'dmResult' => $mapRes,
             'previousSixShipments' => $previousSixShipments);
