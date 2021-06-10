@@ -6556,39 +6556,9 @@ class Application_Service_Reports {
         $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Error Rate", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
         $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-            $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Evaluation Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-            $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
+        $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Reflexive Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
+        $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
-            $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Optional Evaluation Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-            $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
-        $columnIndex++;
-            $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Not teseted Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-            $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
-        $columnIndex++;
-            $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Discrepancies Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-            $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
-        $columnIndex++;
-            $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Kit Expired Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-            $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
-        $columnIndex++;
-            $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Check Computer Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-            $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
-        $columnIndex++;
-            $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Instrument Requires Calibration Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-            $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
-        $columnIndex++;
-            $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Qc Done on Time Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-            $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
-        $columnIndex++;
-            $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Supervisor Approval Comment", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-            $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
-        $columnIndex++;
-
-
-
-
-
-
         $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode("Instruments Used", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
         $ParticipantsRequiringAttention->getStyleByColumnAndRow($columnIndex, $rowIndex)->applyFromArray($columnHeaderStyle);
         $columnIndex++;
@@ -6617,7 +6587,7 @@ class Application_Service_Reports {
             $cartidge_expiry_date="";
             foreach($reflexive_comments as $ref){
                 if($ref['participant'] == $attentionRequiredParticipantData['participant_id']){
-                    $reflexive_comment= $ref['comments'];
+                    $reflexive_comment= $ref['reflexive_comments'];
                     break;
                 }
             }
@@ -6634,7 +6604,7 @@ class Application_Service_Reports {
                 $total_number_of_test_performed=isset($attributes->count_tests_conducted_over_month)?$attributes->count_tests_conducted_over_month:"";
                 $comment_entered_while_submission=$attentionRequiredParticipantData['user_comment'];
             $comment_entered_while_submission=$attentionRequiredParticipantData['pt_test_not_performed_comments'];
-            if($error_rate > 5 || $score < 100 || count($reflexive_comment) > 0  || $comment_entered_while_submission != ""  || $past_two_month_not_submitted == true){
+            if($error_rate > 5 || $score < 100 || $reflexive_comment != "" || $comment_entered_while_submission != ""  || $past_two_month_not_submitted == true){
 
                 $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($participant_id, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
                 $columnIndex++;
@@ -6650,45 +6620,8 @@ class Application_Service_Reports {
                 $columnIndex++;
                 $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($error_rate, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
                 $columnIndex++;
-
-                if(isset($reflexive_comment['eval_comment']) && $reflexive_comment['eval_comment']!= null){
-                    $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment['eval_comment'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                }
+                $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
                 $columnIndex++;
-                if(isset($reflexive_comment['optional_eval_comment']) && $reflexive_comment['optional_eval_comment']!= null){
-                    $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment['optional_eval_comment'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                }
-                $columnIndex++;
-                if(isset($reflexive_comment['ptNotTestedComment']) && $reflexive_comment['ptNotTestedComment']!= null){
-                    $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment['ptNotTestedComment'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                }
-                $columnIndex++;
-                if(isset($reflexive_comment['discrepancies_comment']) && $reflexive_comment['discrepancies_comment']!= null){
-                    $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment['discrepancies_comment'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                }
-                $columnIndex++;
-
-                if(isset($reflexive_comment['kit_expired_comment']) && $reflexive_comment['kit_expired_comment']!= null){
-                    $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment['kit_expired_comment'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                }
-                $columnIndex++;
-                if(isset($reflexive_comment['Check_computer']) && $reflexive_comment['Check_computer']!= null){
-                    $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment['Check_computer'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                }
-                $columnIndex++;
-                if(isset($reflexive_comment['instrument_requires_calibration']) && $reflexive_comment['instrument_requires_calibration']!= null){
-                    $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment['instrument_requires_calibration'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                }
-                $columnIndex++;
-                if(isset($reflexive_comment['qc_done_on_time']) && $reflexive_comment['qc_done_on_time']!= null){
-                    $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment['qc_done_on_time'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                }
-                $columnIndex++;
-                if(isset($reflexive_comment['supervisor_approval']) && $reflexive_comment['supervisor_approval']!= null){
-                    $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($reflexive_comment['supervisor_approval'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-                }
-                $columnIndex++;
-
                 $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($instrument_detail, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
                 $columnIndex++;
                 $ParticipantsRequiringAttention->getCellByColumnAndRow($columnIndex, $rowIndex)->setValueExplicit(html_entity_decode($cartidge_expiry_date, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
@@ -6774,7 +6707,7 @@ class Application_Service_Reports {
                 '' => ''
             );
             foreach ($this->result['shipment'] as $result) {
-                $ref_comment=[];
+                $allComments='';
                 if (isset($result['responseResult']) && sizeof($result['responseResult']) > 0) {
                     $discrepantResultInSubmission = false;
                     $noResultOrError2127InSubmission = false;
@@ -6796,38 +6729,39 @@ class Application_Service_Reports {
                         (isset($result['ptNotTestedComment']) && $result['ptNotTestedComment'] != '')) {
                             
                             if (isset($result['eval_comment']) && $result['eval_comment'] !== '') {
-                               $ref_comment["eval_comment"]= $result['eval_comment'];
+                                $allComments=$allComments . $result['eval_comment'];
                             }
                             if (isset($result['optional_eval_comment']) && $result['optional_eval_comment'] !== '') {
-                               $ref_comment["optional_eval_comment"]= $result['optional_eval_comment'];
+                                $allComments=$allComments . $result['optional_eval_comment'];
                             }
                             if (isset($result['ptNotTestedComment']) && $result['ptNotTestedComment'] != '') {
-                               $ref_comment['ptNotTestedComment']= $result['ptNotTestedComment'];
+                                $allComments=$allComments . $result['ptNotTestedComment'];
                             } else {
                                 if ($discrepantResultInSubmission) {
-                                   $ref_comment['discrepancies_comment']= 'Red highlighted results represent discrepancies between actual and expected results.';
+                                    $allComments=$allComments . 'Red highlighted results represent discrepancies between actual and expected results.';
                                 }
                                 if ($result['cartridge_expired_on']) {
-                                   $ref_comment[' kit_expired_comment']= 'Xpert cartridge kit expired '.Pt_Commons_General::dbDateToString($result['cartridge_expired_on']).'. Use of expired reagents could lead to incorrect reporting of clinical results.'.$result['tests_done_on_expired_cartridges'];
+                                    $allComments=$allComments . 'Xpert cartridge kit expired '.Pt_Commons_General::dbDateToString($result['cartridge_expired_on']).'. Use of expired reagents could lead to incorrect reporting of clinical results.'.$result['tests_done_on_expired_cartridges'];
                                 }
                                 if ($noResultOrError2127InSubmission) {
-                                   $ref_comment['Check_computer']= 'Check computer software GeneXpert Dx to ensure software is not freezing during testing. Check uninterrupted power supply (UPS) to ensure it is capable of sustaining power to GeneXpert for a minimum of 2 hours should an electrical power outage occur. If UPS is unable to sustain GeneXpert instrument for 2 hours request sufficient UPS that will provide power to GeneXpert instrument for no less than 2 hours to enable current run completion in the event of a power outage.';
+                                    $allComments=$allComments . 'Check computer software GeneXpert Dx to ensure software is not freezing during testing. Check uninterrupted power supply (UPS) to ensure it is capable of sustaining power to GeneXpert for a minimum of 2 hours should an electrical power outage occur. If UPS is unable to sustain GeneXpert instrument for 2 hours request sufficient UPS that will provide power to GeneXpert instrument for no less than 2 hours to enable current run completion in the event of a power outage.';
                                 }
                                 if ($result['instrument_requires_calibration']) {
-                                   $ref_comment['instrument_requires_calibration']= 'Calibration is an important maintenance procedure to ensure GeneXpert instruments are functioning properly and yielding accurate results. '.$result['tests_done_after_calibration_due'].'Instrument calibration should take place each year or after every 2,000 runs on each instrument module (whichever comes first). Entered data suggest your GeneXpert Instrument is due for calibration. Request an XpertCheck module calibration kit and perform calibration as instructed. Details on how to perform GeneXpert Instrument calibration can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.';
+                                    $allComments=$allComments . 'Calibration is an important maintenance procedure to ensure GeneXpert instruments are functioning properly and yielding accurate results. '.$result['tests_done_after_calibration_due'].'Instrument calibration should take place each year or after every 2,000 runs on each instrument module (whichever comes first). Entered data suggest your GeneXpert Instrument is due for calibration. Request an XpertCheck module calibration kit and perform calibration as instructed. Details on how to perform GeneXpert Instrument calibration can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.';
                                 }
                                 if (!isset($result['qc_done_on_time']) || !$result['qc_done_on_time']) {
-                                   $ref_comment['qc_done_on_time']= 'Entered data suggest monthly maintenance needs to be performed.  Proper and timely monthly maintenance helps to ensure the longevity and accuracy of the GeneXpert Instrument. Details on how to perform GeneXpert Instrument monthly maintenance can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.';
+                                    $allComments=$allComments . 'Entered data suggest monthly maintenance needs to be performed.  Proper and timely monthly maintenance helps to ensure the longevity and accuracy of the GeneXpert Instrument. Details on how to perform GeneXpert Instrument monthly maintenance can be found at <a href="http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp">http://www.stoptb.org/wg/gli/TrainingPackage_Xpert_MTB_RIF.asp</a> module 10 MAINTENANCE.';
                                 }
                                 if (!isset($result['supervisor_approval']) || $result['supervisor_approval'] == '' || $result['supervisor_approval'] == 'no') {
-                                   $ref_comment['supervisor_approval']= 'Entered data suggest submitted results were not cross checked by a supervisor or designee.  Supervisory report review is an important step in quality assurance of laboratory testing results and must be incorporated into the workflow of all laboratories to ensure accuracy of all reported results.';
+                                    $allComments=$allComments . 'Entered data suggest submitted results were not cross checked by a supervisor or designee.  Supervisory report review is an important step in quality assurance of laboratory testing results and must be incorporated into the workflow of all laboratories to ensure accuracy of all reported results.';
                                 }
                             }
                         }
                 }   
-                $reflexive_comment[]=['participant'=>$result['participant_id'],'comments'=>$ref_comment];
+                $reflexive_comment[]=['participant'=>$result['participant_id'],'reflexive_comments'=>$allComments];
             }
         }
         return  $reflexive_comment;
     }
+
 }
